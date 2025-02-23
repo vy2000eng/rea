@@ -20,7 +20,7 @@ export function GoogleMap ({properties}:{ properties: SchoolInformation[] })  {
 
     return (
         <APIProvider
-            apiKey={'AIzaSyCva1AXooMQldRHZ4L-WF-z08PGNUwN1Tw'} onLoad={() => console.log('Maps API has loaded.')}
+            apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} onLoad={() => console.log('Maps API has loaded.')}
             //apiKey={API_KEY}
             //solutionChannel='GMP_devsite_samples_v3_rgmbasicmap'
 
