@@ -38,54 +38,8 @@ import { X } from "lucide-react";
   } from "lucide-react";
 
 import { GoogleMap } from "@/components/ui/GoogleMaps";
-import { SchoolInformation } from "@/Model/SchoolModel";
-import { GeoCachedLocation } from "@/Model/SchoolModel";
-//import SchoolDetails from "@/results_components/SchoolDetails";
+import { Review, SchoolInformation } from "@/Model/SchoolModel";
 
-
-
-// export type SchoolInformation = {
-//     id: number,
-//     displayName: Text,
-//     formattedAddress:string,
-//     location: {   
-//         latitude: number, 
-//         longitude: number
-//     },
-//     reviews: Review []
-
-
-// }
-// export type Review = {
-
-//     id:number,
-//     authorAttribution: AuthorAttribution,
-//     name: string,
-//     relativePublishTimeDescription: string,
-//     rating: number,
-//     originalText:Text,
-
-
-
-// }
-
-// export type AuthorAttribution = {
-//     displayName: string,
-//     photoUri: string,
-//     uri: string
-
-// }
-
-// export type Text = {
-//     languageCode: string,
-//     text: string,
-// }
-
-// export type GeoCachedLocation = {
-//   formatted_address :string,
-//   latitude: number,
-//   longitude:number
-// }
 
 
 
@@ -136,13 +90,6 @@ export function SearchResults() {
 
     console.log("school info",properties)
 
-    // type Poi ={ key: string, location: google.maps.LatLngLiteral }
-    // const locations: Poi[] = properties.map((locationInformation) =>(
-    //     {
-    //       key: locationInformation.displayName.text,
-    //       location:{lat: locationInformation.location.latitude, lng:locationInformation.location.longitude}
-    //      }
-    // ))
 
 
 
