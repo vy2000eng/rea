@@ -1,47 +1,38 @@
-
-export type SchoolInformation = {
-    id: number,
-    displayName: Text,
-    formattedAddress:string,
-    location: {   
-        latitude: number, 
-        longitude: number
-    },
-    reviews: Review []
-
-
-}
+export type PropertyInformation = {
+	id: number;
+	displayName: Text;
+	formattedAddress: string;
+	location: {
+		latitude: number;
+		longitude: number;
+	};
+	reviews: Review[];
+};
 export type Review = {
-
-    id:number,
-    authorAttribution: AuthorAttribution,
-    name: string,
-    relativePublishTimeDescription: string,
-    rating: number,
-    originalText:Text,
-
-
-
-}
+	id: number;
+	authorAttribution: AuthorAttribution;
+	name: string;
+	relativePublishTimeDescription: string;
+	rating: number;
+	originalText: Text;
+};
 
 export type AuthorAttribution = {
-    displayName: string,
-    photoUri: string,
-    uri: string
-
-}
+	displayName: string;
+	photoUri: string;
+	uri: string;
+};
 
 export type Text = {
-    languageCode: string,
-    text: string,
-}
+	languageCode: string;
+	text: string;
+};
 
 export type GeoCachedLocation = {
-  formatted_address :string,
-  latitude: number,
-  longitude:number
-}
-
+	formatted_address: string;
+	latitude: number;
+	longitude: number;
+};
 
 // }
 // export type SchoolDetails = {
