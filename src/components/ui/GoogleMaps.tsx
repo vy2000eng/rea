@@ -4,64 +4,125 @@ import {
 	AdvancedMarker,
 	Pin,
 } from "@vis.gl/react-google-maps";
+import { ControlPanel } from "./controlPanel";
+import { useState,useMemo } from "react";
 
 //import { SchoolInformation } from '@/pages/Results';
 import { PropertyInformation } from "@/Model/SchoolModel";
 import { Review } from "@/Model/SchoolModel";
 import { PoiMarkers } from "@/results_components/MapMarkers";
+import { getCategories } from "@/Model/SchoolModel";
 
 export type Poi = {
+
 	key: string;
+    type:string;
 	location: google.maps.LatLngLiteral;
 	name: string;
 	address: string;
 	averageRating: number;
 };
 
-export function GoogleMap({
-	properties,
-}: {
-	properties: PropertyInformation[];
-}) {
-	const getAverageRating = (reviews: Review[]) => {
-		let totalStars: number = 0;
+export function GoogleMap(
+    {
+        schoolProperties         ,
+        hospitalProperties       ,
+        corporateOfficeProperties,
+        bankProperties           ,
+        parkProperties           ,
+        postOfficeProperties     ,
+        churchesProperties       , 
+        gymStoreProperties
 
-		reviews.forEach((r) => (totalStars += r.rating));
-		return totalStars / reviews.length;
-	};
+    }: 
+    {
+     schoolProperties         : PropertyInformation[],
+     hospitalProperties       : PropertyInformation[],
+     corporateOfficeProperties: PropertyInformation[],
+     bankProperties           : PropertyInformation[],
+     parkProperties           : PropertyInformation[],
+     postOfficeProperties     : PropertyInformation[],
+     churchesProperties       : PropertyInformation[],
+     gymStoreProperties       : PropertyInformation[],
 
-	//const API_KEY = import.meta.env.DEV_VITE_GOOGLE_API_KEY
-	const locations: Poi[] = properties.map((locationInformation) => ({
-		key: locationInformation.displayName.text,
-		location: {
-			lat: locationInformation.location.latitude,
-			lng: locationInformation.location.longitude,
-		},
-		name: locationInformation.displayName.text,
-		address: locationInformation.formattedAddress, // Add the name
-		averageRating: getAverageRating(locationInformation.reviews),
-	}));
+    }) 
+    {
+    
 
-	return (
-		<div className="w-full h-[75vh]  mx-auto">
-			<APIProvider
-				apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
-				onLoad={() => console.log("Maps API has loaded.")}
-			>
-				<Map
-					style={{ width: "100%", height: "100%" }}
-					defaultCenter={{
-						lat: properties[0].location.latitude,
-						lng: properties[0].location.longitude,
-					}}
-					defaultZoom={8}
-					gestureHandling={"greedy"}
-					mapId={"cbf7dada0ba33cac"}
-					disableDefaultUI
-				>
-					<PoiMarkers pois={locations} />
-				</Map>
-			</APIProvider>
-		</div>
-	);
+        const getAverageRating = (reviews: Review[]) => {
+            let totalStars: number = 0;
+
+            reviews.forEach((r) => (totalStars += r.rating));
+            return totalStars / reviews.length;
+        };
+
+        const allProperties = schoolProperties
+                                .concat(hospitalProperties)
+                                .concat(corporateOfficeProperties)
+                                .concat(bankProperties)
+                                .concat(parkProperties)
+                                .concat(postOfficeProperties)
+                                .concat(churchesProperties)
+                                .concat(gymStoreProperties)
+                                .filter(property => property !== null && property !== undefined);;
+        const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+        const categories = useMemo(() => getCategories(allProperties), [allProperties]);
+
+        const filteredProperties = useMemo(() => {
+          if (!allProperties) return null;
+      
+          return allProperties.filter(
+            t => !selectedCategory || t.type === selectedCategory
+          );
+        }, [allProperties, selectedCategory]);
+
+                            
+
+
+        //const API_KEY = import.meta.env.DEV_VITE_GOOGLE_API_KEY
+        const locations: Poi[] = filteredProperties?
+        filteredProperties.map((locationInformation) => ({
+            key: locationInformation.displayName.text,
+            type: locationInformation.type,
+            location: {
+                lat: locationInformation.location.latitude,
+                lng: locationInformation.location.longitude,
+            },
+            name: locationInformation.displayName.text,
+            address: locationInformation.formattedAddress, // Add the name
+            averageRating: getAverageRating(locationInformation.reviews),
+        })):[];
+
+
+
+
+        return (
+            <div className="w-full h-[75vh]  mx-auto">
+                <APIProvider
+                    apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
+                    onLoad={() => console.log("Maps API has loaded.")}
+                >  
+                 <ControlPanel 
+                        categories      = {categories}
+                        onCategoryChange= {setSelectedCategory}
+                    
+                    />
+                    <Map
+                        style={{ width: "100%", height: "100%" }}
+                        defaultCenter={{
+                            lat: schoolProperties[0].location.latitude,
+                            lng: schoolProperties[0].location.longitude,
+                        }}
+                        defaultZoom={8}
+                        gestureHandling={"greedy"}
+                        mapId={"cbf7dada0ba33cac"}
+                        disableDefaultUI
+                    >
+                        <PoiMarkers pois={locations} />
+                    </Map>
+                 
+                </APIProvider>
+            </div>
+        );
 }

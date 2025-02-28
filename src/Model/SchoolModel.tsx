@@ -1,7 +1,9 @@
 export type PropertyInformation = {
 	id: number;
+
 	displayName: Text;
 	formattedAddress: string;
+    type:string;
 	location: {
 		latitude: number;
 		longitude: number;
@@ -33,6 +35,34 @@ export type GeoCachedLocation = {
 	latitude: number;
 	longitude: number;
 };
+
+export type CategoryData = {
+    key: string;
+    label: string;
+    count: number;
+  };
+
+
+
+export function getCategories(properties?: PropertyInformation []){
+    if (!properties) return []
+    const countByCategory: {[c: string]: number} = {};
+    for (const p of properties) {
+        if (!countByCategory[p.type]) countByCategory[p.type] = 0;
+        countByCategory[p.type]++;
+    }
+    return Object.entries(countByCategory).map(([key, value]) => {
+
+        const label = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        return {
+            key: key,
+            label,
+            count: value
+        };
+    });
+
+
+}
 
 // }
 // export type SchoolDetails = {

@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import SchoolDetails from "@/results_components/SchoolDetails";
+import { ControlPanel } from "@/components/ui/controlPanel";
 import {
   Card,
   CardContent,
@@ -36,14 +37,14 @@ import { Review, PropertyInformation } from "@/Model/SchoolModel";
 
 export function SearchResults() {
   const { location } = useParams();
-  const [schoolProperties, setSchoolProperties] = useState<PropertyInformation[]>([]);
-  const [hospitalProperties, setHospitalProperties] = useState<PropertyInformation[]>([]);
+  const [schoolProperties         , setSchoolProperties         ] = useState<PropertyInformation[]>([]);
+  const [hospitalProperties       , setHospitalProperties       ] = useState<PropertyInformation[]>([]);
   const [corporateOfficeProperties, setCorporateOfficeProperties] = useState<PropertyInformation[]>([]);
-  const [bankProperties, setBankProperties] = useState<PropertyInformation[]>([]);
-  const [parkProperties, setParkProperties] = useState<PropertyInformation[]>([]);
-  const [postOfficeProperties, setPostOfficeProperties] = useState<PropertyInformation[]>([]);
-  const [churchesProperties, setChurchesProperties] = useState<PropertyInformation[]>([]);
-  const [gymStoreProperties, setGymProperties] = useState<PropertyInformation[]>([]);
+  const [bankProperties           , setBankProperties           ] = useState<PropertyInformation[]>([]);
+  const [parkProperties           , setParkProperties           ] = useState<PropertyInformation[]>([]);
+  const [postOfficeProperties     , setPostOfficeProperties     ] = useState<PropertyInformation[]>([]);
+  const [churchesProperties       , setChurchesProperties       ] = useState<PropertyInformation[]>([]);
+  const [gymStoreProperties       , setGymProperties            ] = useState<PropertyInformation[]>([]);
 
   // const [geoCachcedLocation, setGeoCachedLocation] = useState<GeoCachedLocation>()
   const [loading, setLoading] = useState(true);
@@ -65,14 +66,22 @@ export function SearchResults() {
         setLoading(true);
 
         const response = await fetch(
-          `${import.meta.env.VITE_GET_LOCATION_ENDPOINT}${encodeURIComponent(
-            location
-          )}`
+          `${import.meta.env.VITE_GET_LOCATION_ENDPOINT}${encodeURIComponent(location)}`
         );
+        
         if (!response.ok)
           throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
-        setSchoolProperties(data["schoolInformation"]);
+
+        setSchoolProperties         (data["schoolInformation"]);
+        setCorporateOfficeProperties(data["hospitalInformation"]);
+        setHospitalProperties       (data["corporateOfficeInformation"]);
+        setBankProperties           (data["bankInformation"])
+        setParkProperties           (data["parkInformation"])
+        setPostOfficeProperties     (data["postOfficeInformation"])
+        setChurchesProperties       (data["churchInformation"])
+        setGymProperties            (data["gymInformation"])
+
 
 
         setLoading(false);
@@ -100,7 +109,17 @@ export function SearchResults() {
       <div className=" mx-auto space-y-6">
         {/* Map Section */}
         <div className="w-full h-full rounded-sm  border ">
-          <GoogleMap properties={schoolProperties} />
+          <GoogleMap 
+          schoolProperties          = {schoolProperties         }
+          hospitalProperties        = {hospitalProperties       }
+          corporateOfficeProperties = {corporateOfficeProperties}
+          bankProperties            = {bankProperties           }
+          parkProperties            = {parkProperties           }
+          postOfficeProperties      = {postOfficeProperties     }
+          churchesProperties        = {churchesProperties       }
+          gymStoreProperties        = {gymStoreProperties       }
+          
+          />
         </div>
 
         {/* Cards Grid */}
