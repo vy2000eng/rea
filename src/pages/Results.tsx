@@ -45,6 +45,8 @@ export function SearchResults() {
   const [postOfficeProperties     , setPostOfficeProperties     ] = useState<PropertyInformation[]>([]);
   const [churchesProperties       , setChurchesProperties       ] = useState<PropertyInformation[]>([]);
   const [gymStoreProperties       , setGymProperties            ] = useState<PropertyInformation[]>([]);
+  const [restarauntProperties     , setRestarauntProperties     ] = useState<PropertyInformation[]>([]);
+
 
   // const [geoCachcedLocation, setGeoCachedLocation] = useState<GeoCachedLocation>()
   const [loading, setLoading] = useState(true);
@@ -68,7 +70,7 @@ export function SearchResults() {
         const response = await fetch(
           `${import.meta.env.VITE_GET_LOCATION_ENDPOINT}${encodeURIComponent(location)}`
         );
-        
+
         if (!response.ok)
           throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
@@ -81,6 +83,7 @@ export function SearchResults() {
         setPostOfficeProperties     (data["postOfficeInformation"])
         setChurchesProperties       (data["churchInformation"])
         setGymProperties            (data["gymInformation"])
+        setRestarauntProperties     (data["restaurantInformation "])
 
 
 
@@ -118,6 +121,7 @@ export function SearchResults() {
           postOfficeProperties      = {postOfficeProperties     }
           churchesProperties        = {churchesProperties       }
           gymStoreProperties        = {gymStoreProperties       }
+          restarauntProperties      = {restarauntProperties}
           
           />
         </div>

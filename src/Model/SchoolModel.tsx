@@ -1,5 +1,5 @@
 export type PropertyInformation = {
-	id: number;
+	id: string;
 
 	displayName: Text;
 	formattedAddress: string;

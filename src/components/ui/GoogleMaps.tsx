@@ -32,7 +32,8 @@ export function GoogleMap(
         parkProperties           ,
         postOfficeProperties     ,
         churchesProperties       , 
-        gymStoreProperties
+        gymStoreProperties       ,
+        restarauntProperties
 
     }: 
     {
@@ -44,6 +45,8 @@ export function GoogleMap(
      postOfficeProperties     : PropertyInformation[],
      churchesProperties       : PropertyInformation[],
      gymStoreProperties       : PropertyInformation[],
+     restarauntProperties     : PropertyInformation[],
+
 
     }) 
     {
@@ -64,16 +67,18 @@ export function GoogleMap(
                                 .concat(postOfficeProperties)
                                 .concat(churchesProperties)
                                 .concat(gymStoreProperties)
+                                .concat(restarauntProperties)
                                 .filter(property => property !== null && property !== undefined);;
         const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
         const categories = useMemo(() => getCategories(allProperties), [allProperties]);
+        
 
         const filteredProperties = useMemo(() => {
           if (!allProperties) return null;
       
           return allProperties.filter(
-            t => !selectedCategory || t.type === selectedCategory
+            l => !selectedCategory || l.type === selectedCategory
           );
         }, [allProperties, selectedCategory]);
 
@@ -81,19 +86,21 @@ export function GoogleMap(
 
 
         //const API_KEY = import.meta.env.DEV_VITE_GOOGLE_API_KEY
-        const locations: Poi[] = filteredProperties?
-        filteredProperties.map((locationInformation) => ({
-            key: locationInformation.displayName.text,
-            type: locationInformation.type,
-            location: {
-                lat: locationInformation.location.latitude,
-                lng: locationInformation.location.longitude,
-            },
-            name: locationInformation.displayName.text,
-            address: locationInformation.formattedAddress, // Add the name
-            averageRating: getAverageRating(locationInformation.reviews),
-        })):[];
-
+        const locations = useMemo(() => {
+            return filteredProperties
+              ? filteredProperties.map((locationInformation) => ({
+                  key: locationInformation.id,
+                  type: locationInformation.type,
+                  location: {
+                      lat: locationInformation.location.latitude,
+                      lng: locationInformation.location.longitude,
+                  },
+                  name: locationInformation.displayName.text,
+                  address: locationInformation.formattedAddress,
+                  averageRating: getAverageRating(locationInformation.reviews),
+              }))
+              : [];
+          }, [filteredProperties]);
 
 
 
