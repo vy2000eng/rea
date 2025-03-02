@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
-import SchoolDetails from "@/results_components/SchoolDetails";
-import { ControlPanel } from "@/components/ui/controlPanel";
+import   SchoolDetails from "@/results_components/SchoolDetails";
 import {
   Card,
   CardContent,
@@ -30,26 +29,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 
-//import { School, MapPin, Star, StarHalf, Clock } from "lucide-react";
-
 import { GoogleMap } from "@/components/ui/GoogleMaps";
-import { Review, PropertyInformation } from "@/Model/SchoolModel";
-import { 
-  School, 
-  Hospital, 
-  Building2, 
-  Landmark, 
-  Trees, 
-  Mailbox, 
-  Church, 
-  Dumbbell, 
-  Utensils,
-  ShoppingCart 
-} from "lucide-react";
-
+import {PropertyInformation } from "@/Model/SchoolModel";
 
 export function SearchResults() {
-  const { location } = useParams();
+  const {location}                                                = useParams                      (  );
   const [schoolProperties         , setSchoolProperties         ] = useState<PropertyInformation[]>([]);
   const [hospitalProperties       , setHospitalProperties       ] = useState<PropertyInformation[]>([]);
   const [corporateOfficeProperties, setCorporateOfficeProperties] = useState<PropertyInformation[]>([]);
@@ -58,55 +42,47 @@ export function SearchResults() {
   const [postOfficeProperties     , setPostOfficeProperties     ] = useState<PropertyInformation[]>([]);
   const [churchesProperties       , setChurchesProperties       ] = useState<PropertyInformation[]>([]);
   const [groceryStoreProperties   , setGroceryStoreProperties   ] = useState<PropertyInformation[]>([]);
-
   const [gymStoreProperties       , setGymProperties            ] = useState<PropertyInformation[]>([]);
   const [restarauntProperties     , setRestarauntProperties     ] = useState<PropertyInformation[]>([]);
-
-
-  // const [geoCachcedLocation, setGeoCachedLocation] = useState<GeoCachedLocation>()
-  const [loading, setLoading] = useState(true);
-  //const [sortOrder, setSortOrder] = useState('rating');
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  const isFirstMount = useRef(true); // Track first mount
+  const [activeProperties         , setActiveProperties         ] = useState<PropertyInformation[]>([]);
+  const [activeTitle              , setActiveTitle              ] = useState<string>("School Details" );
+  const [loading                  , setLoading                  ] = useState(true                     );
+  const [isDialogOpen             , setIsDialogOpen             ] = useState(false                    );
+  const isFirstMount                                              = useRef  (true                     ); 
 
   useEffect(() => {
     // Skip the second mount in development
     if (!isFirstMount.current) {
       return;
     }
-    isFirstMount.current = false;
+    isFirstMount.current  = false;
 
     const fetchProperties = async () => {
       if (!location) return;
       try {
-        setLoading(true);
-
-        const response = await fetch(
-          `${import.meta.env.VITE_GET_LOCATION_ENDPOINT}${encodeURIComponent(location)}`
-        );
-
-        if (!response.ok)
-          throw new Error(`HTTP error! status: ${response.status}`);
-        const data = await response.json();
-
-        setSchoolProperties         (data["schoolInformation"]);
-        setCorporateOfficeProperties(data["hospitalInformation"]);
-        setHospitalProperties       (data["corporateOfficeInformation"]);
-        setBankProperties           (data["bankInformation"])
-        setParkProperties           (data["parksInformation"])
-        setPostOfficeProperties     (data["postOfficeInformation"])
-        setChurchesProperties       (data["churchInformation"])
-        setGroceryStoreProperties   (data["groceryStoreInformation"])
-        setGymProperties            (data["gymInformation"])
-        setRestarauntProperties     (data["restaurantInformation"])
+            setLoading                           (true                                                                          );
+            const response = await fetch         (`${import.meta.env.VITE_GET_LOCATION_ENDPOINT}${encodeURIComponent(location)}`);
+            if (!response.ok) throw new Error    (`HTTP error! status: ${response.status}`                                      );
+            const data     = await response.json (                                                                              );
+            setSchoolProperties                  (data["schoolInformation"]                                                     );
+            setCorporateOfficeProperties         (data["corporateOfficeInformation"]                                                   );
+            setHospitalProperties                (data["hospitalInformation"]                                            );
+            setBankProperties                    (data["bankInformation"]                                                       );
+            setParkProperties                    (data["parksInformation"]                                                      );
+            setPostOfficeProperties              (data["postOfficeInformation"]                                                 );
+            setChurchesProperties                (data["churchInformation"]                                                     );
+            setGroceryStoreProperties            (data["groceryStoreInformation"]                                               );
+            setGymProperties                     (data["gymInformation"]                                                        );
+            setRestarauntProperties              (data["restaurantInformation"]                                                 );
+            setLoading                           (false);
+            setActiveProperties                  (data["schoolInformation"] )
+            setActiveTitle                       ("Universities")
 
 
-
-        setLoading(false);
+            //console.log(activeProperties)
       } catch (error) {
-        console.error("Error fetching properties:", error);
-        setLoading(false);
+            console.error("Error fetching properties:", error);
+            setLoading(false);
       }
     };
 
@@ -114,22 +90,21 @@ export function SearchResults() {
   }, [location]);
 
 
+
+
+
   const propertyCards = [
-    { icon: School, title: "School Information", count: schoolProperties.length, type: "schools" },
-    { icon: Hospital, title: "Hospitals", count: hospitalProperties.length, type: "hospitals" },
-    { icon: Building2, title: "Corporate Offices", count: corporateOfficeProperties.length, type: "offices" },
-    { icon: Landmark, title: "Banks", count: bankProperties.length, type: "banks" },
-    { icon: Trees, title: "Parks", count: parkProperties.length, type: "parks" },
-    { icon: Mailbox, title: "Post Offices", count: postOfficeProperties.length, type: "post offices" },
-    { icon: Church, title: "Churches", count: churchesProperties.length, type: "churches" },
-    { icon: Utensils, title: "GroceryStore", count: groceryStoreProperties.length, type: "groceries" },
-
-    { icon: Dumbbell, title: "Gyms", count: gymStoreProperties.length, type: "gyms" },
-    { icon: Utensils, title: "Restaurants", count: restarauntProperties.length, type: "restaurants" }
+    {title: "Universities      ", count: schoolProperties         .length, type: "schools"     ,data: schoolProperties          },
+    {title: "Hospitals"         , count: hospitalProperties       .length, type: "hospitals"   ,data: hospitalProperties        },
+    {title: "Corporate Offices" , count: corporateOfficeProperties.length, type: "offices"     ,data: corporateOfficeProperties },
+    {title: "Banks"             , count: bankProperties           .length, type: "banks"       ,data: bankProperties            },
+    {title: "Parks"             , count: parkProperties           .length, type: "parks"       ,data: parkProperties            },
+    {title: "Post Offices"      , count: postOfficeProperties     .length, type: "post offices",data: postOfficeProperties      },
+    {title: "Churches"          , count: churchesProperties       .length, type: "churches"    ,data: churchesProperties        },
+    {title: "GroceryStore"      , count: groceryStoreProperties   .length, type: "groceries"   ,data: groceryStoreProperties    },
+    {title: "Gyms"              , count: gymStoreProperties       .length, type: "gyms"        ,data: gymStoreProperties        },
+    {title: "Restaurants"       , count: restarauntProperties     .length, type: "restaurants" ,data: restarauntProperties      }
   ];
-
-  console.log("school info", schoolProperties);
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
@@ -137,10 +112,10 @@ export function SearchResults() {
       </div>
     );
   }
-
   return (
     <>
-      <div className=" mx-auto space-y-6 relative">
+
+      <div className=" mx-auto space-y-6 relative bg-white">
         {/* Map Section */}
         <div className="w-full h-full rounded-sm  border ">
           <GoogleMap 
@@ -157,39 +132,23 @@ export function SearchResults() {
           
           />
         </div>
+        <SchoolDetails properties={activeProperties} title= {activeTitle} />
 
-        {/* Cards Grid */}
-        {/* <div className="grid md:grid-cols-8 gap-6">
-          <Card
-            className="cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => setIsDialogOpen(true)}
-          >
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <School className="h-5 w-5" />
-                <CardTitle>School Information</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                {schoolProperties.length} schools found in the area
-              </p>
-            </CardContent>
-          </Card>
-     
-        </div> */}
-         <div className="grid md:grid-cols-5 gap-6">
-          {propertyCards.map(card => {
-            const Icon = card.icon;
-            return (
-              <Card
-                key={card.title}
-                className="cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={() => setIsDialogOpen(true)}
-              >
+      <div className="grid md:grid-cols-5 gap-6">
+            {propertyCards.map(card => {
+              return (
+                <Card
+                  key={card.title}
+                  className="cursor-pointer hover:shadow-lg transition-shadow"
+                  onClick={() => {
+                      setActiveProperties(card.data);
+                      setActiveTitle     (card.title);
+                      setIsDialogOpen    (true);
+                    }
+                  }
+                >
                 <CardHeader>
                   <div className="flex items-center gap-2">
-                    <Icon className="h-5 w-5" />
                     <CardTitle>{card.title}</CardTitle>
                   </div>
                 </CardHeader>
@@ -199,27 +158,19 @@ export function SearchResults() {
                   </p>
                 </CardContent>
               </Card>
-            );
-          })}
-           </div>
-
-
-
-
+              );
+            })}
       </div>
-
-      {/* Dialog/Popup */}
-      {/* Dialog/Popup */}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+    </div>
+      {/* <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[800px] h-[90vh] overflow-y-auto">
           <DialogHeader>
             <div className="flex justify-between items-center">
-              <DialogTitle>School Details</DialogTitle>
+              <DialogTitle>{activeTitle}</DialogTitle>
             </div>
-          </DialogHeader>
-          <SchoolDetails properties={schoolProperties} />
-        </DialogContent>
-      </Dialog>
+          </DialogHeader> */}
+        {/* </DialogContent>
+      </Dialog> */}
     </>
   );
 }

@@ -26,27 +26,15 @@ export type MarkerProps = {
 	onClick: (poi: Poi) => void;
 	setMarkerRef: (marker: Marker | null, key: string) => void;
 };
-
-// import {MarkerClusterer} from '@googlemaps/markerclusterer';
-// import type {Marker} from '@googlemaps/markerclusterer';//type Poi ={ key: string, location: google.maps.LatLngLiteral,  name: string ,address:string, averageRating:number}
-
 export const MarkerWithInfo = (props: MarkerProps) => {
 	const { poi, onClick, setMarkerRef } = props;
 	const [infoWindowShown, setInfoWindowShown] = useState(false);
-	//const [markerRef, marker] = useAdvancedMarkerRef();
 	const ref = useCallback(
 		(marker: google.maps.marker.AdvancedMarkerElement) =>
 			setMarkerRef(marker, poi.key),
 		[setMarkerRef, poi.key]
 	);
 	const handleClick = useCallback(() => onClick(poi), [onClick, poi]);
-
-	// const handleMarkerClick = useCallback(
-	// 	() => setInfoWindowShown((isShown) => !isShown),
-	// 	[]
-	// );
-
-	//const handleClose = useCallback(() => setInfoWindowShown(false), []);
 
 	return (
 		<>

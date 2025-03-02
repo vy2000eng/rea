@@ -9,9 +9,9 @@ import { useState,useMemo } from "react";
 
 //import { SchoolInformation } from '@/pages/Results';
 import { PropertyInformation } from "@/Model/SchoolModel";
-import { Review } from "@/Model/SchoolModel";
-import { PoiMarkers } from "@/results_components/MapMarkers";
-import { getCategories } from "@/Model/SchoolModel";
+import { Review              } from "@/Model/SchoolModel";
+import { PoiMarkers          } from "@/results_components/MapMarkers";
+import { getCategories       } from "@/Model/SchoolModel";
 
 export type Poi = {
 
@@ -118,7 +118,7 @@ export function GoogleMap(
                         style={{ width: "100%", height: "100%" }}
                         defaultCenter={{
                             lat: schoolProperties[0].location.latitude,
-                            lng: schoolProperties[0].location.longitude-0.05,
+                            lng: schoolProperties[0].location.longitude,
                         }}
                         defaultZoom={8}
                         gestureHandling={"greedy"}
