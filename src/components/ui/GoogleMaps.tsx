@@ -32,6 +32,7 @@ export function GoogleMap(
         parkProperties           ,
         postOfficeProperties     ,
         churchesProperties       , 
+        groceryStoreProperties   ,
         gymStoreProperties       ,
         restarauntProperties
 
@@ -44,6 +45,7 @@ export function GoogleMap(
      parkProperties           : PropertyInformation[],
      postOfficeProperties     : PropertyInformation[],
      churchesProperties       : PropertyInformation[],
+     groceryStoreProperties   : PropertyInformation[],
      gymStoreProperties       : PropertyInformation[],
      restarauntProperties     : PropertyInformation[],
 
@@ -66,6 +68,7 @@ export function GoogleMap(
                                 .concat(parkProperties)
                                 .concat(postOfficeProperties)
                                 .concat(churchesProperties)
+                                .concat(groceryStoreProperties)
                                 .concat(gymStoreProperties)
                                 .concat(restarauntProperties)
                                 .filter(property => property !== null && property !== undefined);;
@@ -110,16 +113,12 @@ export function GoogleMap(
                     apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
                     onLoad={() => console.log("Maps API has loaded.")}
                 >  
-                 <ControlPanel 
-                        categories      = {categories}
-                        onCategoryChange= {setSelectedCategory}
-                    
-                    />
+                 
                     <Map
                         style={{ width: "100%", height: "100%" }}
                         defaultCenter={{
                             lat: schoolProperties[0].location.latitude,
-                            lng: schoolProperties[0].location.longitude,
+                            lng: schoolProperties[0].location.longitude-0.05,
                         }}
                         defaultZoom={8}
                         gestureHandling={"greedy"}
@@ -128,6 +127,12 @@ export function GoogleMap(
                     >
                         <PoiMarkers pois={locations} />
                     </Map>
+
+                    <ControlPanel 
+                        categories      = {categories}
+                        onCategoryChange= {setSelectedCategory}
+                    
+                    />
                  
                 </APIProvider>
             </div>

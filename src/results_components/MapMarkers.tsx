@@ -8,6 +8,18 @@ import {
 } from "@vis.gl/react-google-maps";
 import { Poi } from "@/components/ui/GoogleMaps";
 import { type Marker, MarkerClusterer } from "@googlemaps/markerclusterer";
+import { 
+  GraduationCap, 
+  Hospital, 
+  Building2, 
+  Landmark, 
+  Trees, 
+  Mailbox, 
+  Church, 
+  ShoppingCart, 
+  Dumbbell, 
+  Utensils 
+} from "lucide-react";
 
 export type MarkerProps = {
 	poi: Poi;
@@ -40,11 +52,94 @@ export const MarkerWithInfo = (props: MarkerProps) => {
 		<>
 			{
 				<AdvancedMarker ref={ref} position={poi.location} onClick={handleClick}>
-					<Pin
-						background={"#FBBC04"}
-						glyphColor={"#000"}
-						borderColor={"#000"}
-					/>
+           {poi.type === "university" ? 
+              <Pin 
+                background={"#4285F4"} 
+                glyphColor={"white"} 
+                borderColor={"white"} 
+                scale={1.2}
+                glyph={"🎓"} 
+              /> :
+            poi.type === "hospital" ? 
+              <Pin 
+                background={"#EA4335"} 
+                glyphColor={"white"} 
+                borderColor={"white"} 
+                scale={1.2}
+                glyph={"+"} 
+              /> :
+            poi.type === "corporate_office" ? 
+              <Pin 
+                background={"#FBBC04"} 
+                glyphColor={"black"} 
+                borderColor={"white"} 
+                scale={1.2}
+                glyph={"🏢"} 
+              /> :
+            poi.type === "bank" ? 
+              <Pin 
+                background={"#34A853"} 
+                glyphColor={"white"} 
+                borderColor={"white"} 
+                scale={1.2}
+                glyph={"$"} 
+              /> :
+            poi.type === "park" ? 
+              <Pin 
+                background={"#0F9D58"} 
+                glyphColor={"white"} 
+                borderColor={"white"} 
+                scale={1.2}
+                glyph={"🌳"} 
+              /> :
+            poi.type === "post_office" ? 
+              <Pin 
+                background={"#9C27B0"} 
+                glyphColor={"white"} 
+                borderColor={"white"} 
+                scale={1.2}
+                glyph={"✉"} 
+              /> :
+            poi.type === "church" ? 
+              <Pin 
+                background={"#673AB7"} 
+                glyphColor={"white"} 
+                borderColor={"white"} 
+                scale={1.2}
+                glyph={"✝"} 
+              /> :
+            poi.type === "grocery_store" ? 
+              <Pin 
+                background={"#FF9800"} 
+                glyphColor={"white"} 
+                borderColor={"white"} 
+                scale={1.2}
+                glyph={"🛒"} 
+              /> :
+            poi.type === "gym" ? 
+              <Pin 
+                background={"#E91E63"} 
+                glyphColor={"white"} 
+                borderColor={"white"} 
+                scale={1.2}
+                glyph={"💪"} 
+              /> :
+            poi.type === "restaurant" ? 
+              <Pin 
+                background={"#795548"} 
+                glyphColor={"white"} 
+                borderColor={"white"} 
+                scale={1.2}
+                glyph={"🍽"} 
+              /> :
+              <Pin 
+                background={"#FBBC04"} 
+                glyphColor={"#000"} 
+                borderColor={"#000"} 
+                scale={1.1}
+              />
+           }
+          
 				</AdvancedMarker>
 			}
 		</>
@@ -105,10 +200,10 @@ export const PoiMarkers = (props: { pois: Poi[] }) => {
 		<>
 			{props.pois.map((poi) => (
 				<MarkerWithInfo
-					key={poi.key}
-					poi={poi}
-					setMarkerRef={setMarkerRef}
-					onClick={handleMarkerClick}
+					key          =  {poi.key}
+					poi          =  {poi}
+					setMarkerRef =  {setMarkerRef}
+					onClick      =  {handleMarkerClick}
 				/>
 			))}
 			{selectedPoiKey && (

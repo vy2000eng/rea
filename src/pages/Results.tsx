@@ -30,10 +30,23 @@ import {
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 
-import { School, MapPin, Star, StarHalf, Clock } from "lucide-react";
+//import { School, MapPin, Star, StarHalf, Clock } from "lucide-react";
 
 import { GoogleMap } from "@/components/ui/GoogleMaps";
 import { Review, PropertyInformation } from "@/Model/SchoolModel";
+import { 
+  School, 
+  Hospital, 
+  Building2, 
+  Landmark, 
+  Trees, 
+  Mailbox, 
+  Church, 
+  Dumbbell, 
+  Utensils,
+  ShoppingCart 
+} from "lucide-react";
+
 
 export function SearchResults() {
   const { location } = useParams();
@@ -44,6 +57,8 @@ export function SearchResults() {
   const [parkProperties           , setParkProperties           ] = useState<PropertyInformation[]>([]);
   const [postOfficeProperties     , setPostOfficeProperties     ] = useState<PropertyInformation[]>([]);
   const [churchesProperties       , setChurchesProperties       ] = useState<PropertyInformation[]>([]);
+  const [groceryStoreProperties   , setGroceryStoreProperties   ] = useState<PropertyInformation[]>([]);
+
   const [gymStoreProperties       , setGymProperties            ] = useState<PropertyInformation[]>([]);
   const [restarauntProperties     , setRestarauntProperties     ] = useState<PropertyInformation[]>([]);
 
@@ -79,11 +94,12 @@ export function SearchResults() {
         setCorporateOfficeProperties(data["hospitalInformation"]);
         setHospitalProperties       (data["corporateOfficeInformation"]);
         setBankProperties           (data["bankInformation"])
-        setParkProperties           (data["parkInformation"])
+        setParkProperties           (data["parksInformation"])
         setPostOfficeProperties     (data["postOfficeInformation"])
         setChurchesProperties       (data["churchInformation"])
+        setGroceryStoreProperties   (data["groceryStoreInformation"])
         setGymProperties            (data["gymInformation"])
-        setRestarauntProperties     (data["restaurantInformation "])
+        setRestarauntProperties     (data["restaurantInformation"])
 
 
 
@@ -97,6 +113,21 @@ export function SearchResults() {
     fetchProperties();
   }, [location]);
 
+
+  const propertyCards = [
+    { icon: School, title: "School Information", count: schoolProperties.length, type: "schools" },
+    { icon: Hospital, title: "Hospitals", count: hospitalProperties.length, type: "hospitals" },
+    { icon: Building2, title: "Corporate Offices", count: corporateOfficeProperties.length, type: "offices" },
+    { icon: Landmark, title: "Banks", count: bankProperties.length, type: "banks" },
+    { icon: Trees, title: "Parks", count: parkProperties.length, type: "parks" },
+    { icon: Mailbox, title: "Post Offices", count: postOfficeProperties.length, type: "post offices" },
+    { icon: Church, title: "Churches", count: churchesProperties.length, type: "churches" },
+    { icon: Utensils, title: "GroceryStore", count: groceryStoreProperties.length, type: "groceries" },
+
+    { icon: Dumbbell, title: "Gyms", count: gymStoreProperties.length, type: "gyms" },
+    { icon: Utensils, title: "Restaurants", count: restarauntProperties.length, type: "restaurants" }
+  ];
+
   console.log("school info", schoolProperties);
 
   if (loading) {
@@ -109,26 +140,26 @@ export function SearchResults() {
 
   return (
     <>
-      <div className=" mx-auto space-y-6">
+      <div className=" mx-auto space-y-6 relative">
         {/* Map Section */}
         <div className="w-full h-full rounded-sm  border ">
           <GoogleMap 
-          schoolProperties          = {schoolProperties         }
-          hospitalProperties        = {hospitalProperties       }
-          corporateOfficeProperties = {corporateOfficeProperties}
-          bankProperties            = {bankProperties           }
-          parkProperties            = {parkProperties           }
-          postOfficeProperties      = {postOfficeProperties     }
-          churchesProperties        = {churchesProperties       }
-          gymStoreProperties        = {gymStoreProperties       }
-          restarauntProperties      = {restarauntProperties}
+            schoolProperties          = {schoolProperties         }
+            hospitalProperties        = {hospitalProperties       }
+            corporateOfficeProperties = {corporateOfficeProperties}
+            bankProperties            = {bankProperties           }
+            parkProperties            = {parkProperties           }
+            postOfficeProperties      = {postOfficeProperties     }
+            churchesProperties        = {churchesProperties       }
+            groceryStoreProperties    = {groceryStoreProperties   }
+            gymStoreProperties        = {gymStoreProperties       }
+            restarauntProperties      = {restarauntProperties     }
           
           />
         </div>
 
         {/* Cards Grid */}
-        <div className="grid md:grid-cols-4 gap-6">
-          {/* Location Card */}
+        {/* <div className="grid md:grid-cols-8 gap-6">
           <Card
             className="cursor-pointer hover:shadow-lg transition-shadow"
             onClick={() => setIsDialogOpen(true)}
@@ -145,43 +176,36 @@ export function SearchResults() {
               </p>
             </CardContent>
           </Card>
-          <Card
-            className="cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => setIsDialogOpen(true)}
-          >
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <School className="h-5 w-5" />
-                <CardTitle>Restaraunts</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                {schoolProperties.length} schools found in the area
-              </p>
-            </CardContent>
-          </Card>
+     
+        </div> */}
+         <div className="grid md:grid-cols-5 gap-6">
+          {propertyCards.map(card => {
+            const Icon = card.icon;
+            return (
+              <Card
+                key={card.title}
+                className="cursor-pointer hover:shadow-lg transition-shadow"
+                onClick={() => setIsDialogOpen(true)}
+              >
+                <CardHeader>
+                  <div className="flex items-center gap-2">
+                    <Icon className="h-5 w-5" />
+                    <CardTitle>{card.title}</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    {card.count} {card.type} found in the area
+                  </p>
+                </CardContent>
+              </Card>
+            );
+          })}
+           </div>
 
-          {/* Property Details Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Property Details</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">Property information here</p>
-            </CardContent>
-          </Card>
 
-          {/* Contact Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Contact</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">Contact information here</p>
-            </CardContent>
-          </Card>
-        </div>
+
+
       </div>
 
       {/* Dialog/Popup */}
