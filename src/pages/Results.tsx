@@ -49,6 +49,8 @@ export function SearchResults() {
   const [loading                  , setLoading                  ] = useState(true                     );
   const [isDialogOpen             , setIsDialogOpen             ] = useState(false                    );
   const isFirstMount                                              = useRef  (true                     ); 
+  const d = [];
+
 
   useEffect(() => {
     // Skip the second mount in development
@@ -77,6 +79,7 @@ export function SearchResults() {
             setLoading                           (false);
             setActiveProperties                  (data["schoolInformation"] )
             setActiveTitle                       ("Universities")
+            console.log(data["crimeInformation"][0].offenses)
 
 
             //console.log(activeProperties)

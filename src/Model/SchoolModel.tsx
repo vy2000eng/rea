@@ -43,6 +43,68 @@ export type CategoryData = {
   };
 
 
+export type CrimeData = {
+    agencyName: string;
+    counties: string;
+    latitude:number;
+    longitude: number;
+    offenses:OffensesData
+    populations:Populations 
+    tooltips: Populations
+
+}
+
+export type OffensesData = {
+    actuals: {
+        [agencyName: string]: {
+          [timeperiod: string]: number | null;  // Example: "01-2021": null, "01-2022": 0
+        };
+      };
+
+    rates: {
+        [agencyName: string]: {
+            [timeperiod: string]: number | null;
+        };
+    };
+}
+
+export type Populations = {
+   participated_population :{  
+        [agencyName: string]: {
+            [timeperiod: string]: number | null;
+        }
+    };
+   population:  {
+        [agencyName: string]: {
+            [timeperiod: string]: number | null;
+        };
+    }; 
+    
+}
+
+export type ToolTips = {
+    population:  {
+        percentageOfPopulationCoverage:{
+            State:{
+                [state: string]: {
+                    [timeperiod: string]: number | null;
+                };
+            };
+            County:{
+                [country: string]: {
+                        [timeperiod: string]: number | null;
+                    };
+            }; 
+        }
+    }
+}
+
+
+
+export type Actuals = {
+
+}
+
 
 export function getCategories(properties?: PropertyInformation []){
     if (!properties) return []
@@ -64,36 +126,3 @@ export function getCategories(properties?: PropertyInformation []){
 
 }
 
-// }
-// export type SchoolDetails = {
-//     id: number,
-//     displayName: {
-//         languageCode: string,
-//         text: string
-//     },
-//     formattedAddress: string,
-//     location: {
-//         latitude: number,
-//         longitude: number
-//     },
-//     reviews: {
-//         id: number,
-//         authorAttribution: {
-//             displayName: string,
-//             photoUri: string,
-//             uri: string
-//         },
-//         name: string,
-//         relativePublishTimeDescription: string,
-//         rating: number,
-//         originalText: {
-//             languageCode: string,
-//             text: string
-//         }
-//     }[],
-//     geoCachedLocation?: {
-//         formatted_address: string,
-//         latitude: number,
-//         longitude: number
-//     }
-// }
