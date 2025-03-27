@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import   SchoolDetails from "@/results_components/SchoolDetails";
+import CrimeChart from "@/results_components/CrimeChart";
 import {
   Card,
   CardContent,
@@ -30,7 +31,7 @@ import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 
 import { GoogleMap } from "@/components/ui/GoogleMaps";
-import {PropertyInformation } from "@/Model/SchoolModel";
+import {CrimeData, OffensesData, PropertyInformation } from "@/Model/SchoolModel";
 
 export function SearchResults() {
   const {location}                                                = useParams                      (  );
@@ -48,6 +49,7 @@ export function SearchResults() {
   const [activeTitle              , setActiveTitle              ] = useState<string>("School Details" );
   const [loading                  , setLoading                  ] = useState(true                     );
   const [isDialogOpen             , setIsDialogOpen             ] = useState(false                    );
+  const [crimeData, setCrimeData] = useState<CrimeData[]>([])
   const isFirstMount                                              = useRef  (true                     ); 
   const d = [];
 
@@ -76,10 +78,10 @@ export function SearchResults() {
             setGroceryStoreProperties            (data["groceryStoreInformation"]                                               );
             setGymProperties                     (data["gymInformation"]                                                        );
             setRestarauntProperties              (data["restaurantInformation"]                                                 );
+            setCrimeData(data["crimeInformation"]);
             setLoading                           (false);
             setActiveProperties                  (data["schoolInformation"] )
             setActiveTitle                       ("Universities")
-            console.log(data["crimeInformation"][0].offenses)
 
 
             //console.log(activeProperties)
@@ -106,7 +108,9 @@ export function SearchResults() {
     {title: "Churches"          , count: churchesProperties       .length, type: "churches"    ,data: churchesProperties        },
     {title: "GroceryStore"      , count: groceryStoreProperties   .length, type: "groceries"   ,data: groceryStoreProperties    },
     {title: "Gyms"              , count: gymStoreProperties       .length, type: "gyms"        ,data: gymStoreProperties        },
-    {title: "Restaurants"       , count: restarauntProperties     .length, type: "restaurants" ,data: restarauntProperties      }
+    {title: "Restaurants"       , count: restarauntProperties     .length, type: "restaurants" ,data: restarauntProperties      },
+  
+    {title: "Crime"       , count: restarauntProperties     .length, type: "crimes" ,data: restarauntProperties      }
   ];
   if (loading) {
     return (
@@ -117,8 +121,9 @@ export function SearchResults() {
   }
   return (
     <>
-
       <div className=" mx-auto space-y-6 relative bg-white">
+      
+         <CrimeChart crimeData={crimeData}/>
         {/* Map Section */}
         <div className="w-full h-full rounded-sm  border ">
           <GoogleMap 

@@ -44,7 +44,8 @@ export type CategoryData = {
 
 
 export type CrimeData = {
-    agencyName: string;
+    agency_name: string;
+    state_name:string,
     counties: string;
     latitude:number;
     longitude: number;
@@ -54,19 +55,16 @@ export type CrimeData = {
 
 }
 
-export type OffensesData = {
-    actuals: {
-        [agencyName: string]: {
-          [timeperiod: string]: number | null;  // Example: "01-2021": null, "01-2022": 0
-        };
+export interface OffensesData{ 
+    offenses:{
+        rates:{
+            [agencyName: string]: {
+                [timeperiod: string]: number | null;  // Example: "01-2021": null, "01-2022": 0
+            };   
       };
+    }      
+};
 
-    rates: {
-        [agencyName: string]: {
-            [timeperiod: string]: number | null;
-        };
-    };
-}
 
 export type Populations = {
    participated_population :{  
