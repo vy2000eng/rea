@@ -45,7 +45,7 @@ export function SearchResults() {
   const [groceryStoreProperties   , setGroceryStoreProperties   ] = useState<PropertyInformation[]>([]);
   const [gymStoreProperties       , setGymProperties            ] = useState<PropertyInformation[]>([]);
   const [restarauntProperties     , setRestarauntProperties     ] = useState<PropertyInformation[]>([]);
-  const [activeProperties         , setActiveProperties         ] = useState<PropertyInformation[]>([]);
+  const [activeProperties         , setActiveProperties         ] = useState<PropertyInformation[]| CrimeData[]>([]);
   const [activeTitle              , setActiveTitle              ] = useState<string>("School Details" );
   const [loading                  , setLoading                  ] = useState(true                     );
   const [isDialogOpen             , setIsDialogOpen             ] = useState(false                    );
@@ -94,7 +94,7 @@ export function SearchResults() {
     fetchProperties();
   }, [location]);
 
-
+  
 
 
 
@@ -110,7 +110,7 @@ export function SearchResults() {
     {title: "Gyms"              , count: gymStoreProperties       .length, type: "gyms"        ,data: gymStoreProperties        },
     {title: "Restaurants"       , count: restarauntProperties     .length, type: "restaurants" ,data: restarauntProperties      },
   
-    {title: "Crime"       , count: restarauntProperties     .length, type: "crimes" ,data: restarauntProperties      }
+    {title: "Crime"       , count:0      , type: "crimes" ,data: crimeData}
   ];
   if (loading) {
     return (
@@ -123,7 +123,6 @@ export function SearchResults() {
     <>
       <div className=" mx-auto space-y-6 relative bg-white">
       
-         <CrimeChart crimeData={crimeData}/>
         {/* Map Section */}
         <div className="w-full h-full rounded-sm  border ">
           <GoogleMap 

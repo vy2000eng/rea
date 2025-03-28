@@ -1,3 +1,7 @@
+export interface PropertyOrCrimeData {
+    data : PropertyInformation[] |CrimeData[]
+}
+
 export type PropertyInformation = {
 	id: string;
 
@@ -52,6 +56,7 @@ export type CrimeData = {
     offenses:OffensesData
     populations:Populations 
     tooltips: Populations
+    type:string
 
 }
 

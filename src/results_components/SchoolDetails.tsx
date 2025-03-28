@@ -15,19 +15,28 @@ import {
 	Clock,
 } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import CrimeChart from "./CrimeChart";
 
 
-import { PropertyInformation } from "@/Model/SchoolModel";
+import { CrimeData, PropertyInformation } from "@/Model/SchoolModel";
 const SchoolDetails = ({
 	properties, title
 }: {
-	properties: PropertyInformation[],
+	properties: PropertyInformation[] | CrimeData[]
   title:string
 }) => {
 	console.log("All properties:", properties);
 	console.log("School Information:", properties);
 
+  if (title === "Crime"){
+    return(
+      
+      
+         <CrimeChart crimeData={properties as CrimeData[]}/>
+    )
+  }
 	return (
+
     <div className="container mx-auto p-4 space-y-6">
     {/* Outer Accordion to collapse all locations */}
     <Accordion type="single" collapsible className="w-full border rounded-lg">
@@ -37,7 +46,7 @@ const SchoolDetails = ({
         </AccordionTrigger>
         <AccordionContent>
           <Accordion type="single" collapsible className="w-full">
-            {properties.map((school, index) => (
+            {(properties as PropertyInformation[]).map((school, index) => (
               <AccordionItem key={school.id} value={`item-${index}`}>
                 <AccordionTrigger className="bg-white">
                   <div className="flex items-center gap-2 text-left">
