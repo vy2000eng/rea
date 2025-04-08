@@ -30,8 +30,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 
+import { parsePoliceDepartmentData } from "@/lib/utils";
+
 import { GoogleMap } from "@/components/ui/GoogleMaps";
-import {CrimeData, OffensesData, PropertyInformation } from "@/Model/SchoolModel";
+import {PropertyInformation } from "@/Model/SchoolModel";
+import { CrimeData, OffensesData } from "@/Model/CrimeModel";
 
 export function SearchResults() {
   const {location}                                                = useParams                      (  );
@@ -49,9 +52,10 @@ export function SearchResults() {
   const [activeTitle              , setActiveTitle              ] = useState<string>("School Details" );
   const [loading                  , setLoading                  ] = useState(true                     );
   const [isDialogOpen             , setIsDialogOpen             ] = useState(false                    );
-  const [crimeData, setCrimeData] = useState<CrimeData[]>([])
+  const [crimeData                , setCrimeData]                 = useState<CrimeData[]>([])
+  const[policeDepartments         ,setPoliceDepartments]          = useState<PropertyInformation[]>([]);
   const isFirstMount                                              = useRef  (true                     ); 
-  const d = [];
+  //const d = [];
 
 
   useEffect(() => {
@@ -78,10 +82,11 @@ export function SearchResults() {
             setGroceryStoreProperties            (data["groceryStoreInformation"]                                               );
             setGymProperties                     (data["gymInformation"]                                                        );
             setRestarauntProperties              (data["restaurantInformation"]                                                 );
-            setCrimeData(data["crimeInformation"]);
+            setCrimeData                         (data["crimeInformation"]);
             setLoading                           (false);
             setActiveProperties                  (data["schoolInformation"] )
             setActiveTitle                       ("Universities")
+         
 
 
             //console.log(activeProperties)
@@ -93,6 +98,13 @@ export function SearchResults() {
 
     fetchProperties();
   }, [location]);
+
+  let policeDepartmentProperties:PropertyInformation[] = parsePoliceDepartmentData(crimeData)
+  // setPoliceDepartments( policeDepartmentProperties)
+ // parsePoliceDepartmentData(crimeData)
+
+
+
 
   
 
@@ -109,8 +121,8 @@ export function SearchResults() {
     {title: "GroceryStore"      , count: groceryStoreProperties   .length, type: "groceries"   ,data: groceryStoreProperties    },
     {title: "Gyms"              , count: gymStoreProperties       .length, type: "gyms"        ,data: gymStoreProperties        },
     {title: "Restaurants"       , count: restarauntProperties     .length, type: "restaurants" ,data: restarauntProperties      },
-  
-    {title: "Crime"       , count:0      , type: "crimes" ,data: crimeData}
+
+    {title: "Crime"             , count:crimeData.length      , type: "Crime Agencies" ,data: crimeData}
   ];
   if (loading) {
     return (
@@ -136,6 +148,7 @@ export function SearchResults() {
             groceryStoreProperties    = {groceryStoreProperties   }
             gymStoreProperties        = {gymStoreProperties       }
             restarauntProperties      = {restarauntProperties     }
+            policeDepartments =         {policeDepartmentProperties}
           
           />
         </div>
@@ -169,15 +182,6 @@ export function SearchResults() {
             })}
       </div>
     </div>
-      {/* <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[800px] h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <div className="flex justify-between items-center">
-              <DialogTitle>{activeTitle}</DialogTitle>
-            </div>
-          </DialogHeader> */}
-        {/* </DialogContent>
-      </Dialog> */}
     </>
   );
 }

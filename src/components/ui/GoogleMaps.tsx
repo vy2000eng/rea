@@ -34,7 +34,8 @@ export function GoogleMap(
         churchesProperties       , 
         groceryStoreProperties   ,
         gymStoreProperties       ,
-        restarauntProperties
+        restarauntProperties     ,
+        policeDepartments
 
     }: 
     {
@@ -48,10 +49,12 @@ export function GoogleMap(
      groceryStoreProperties   : PropertyInformation[],
      gymStoreProperties       : PropertyInformation[],
      restarauntProperties     : PropertyInformation[],
+     policeDepartments: PropertyInformation[]
 
 
     }) 
     {
+        console.log(policeDepartments)
     
 
         const getAverageRating = (reviews: Review[]) => {
@@ -71,6 +74,7 @@ export function GoogleMap(
                                 .concat(groceryStoreProperties)
                                 .concat(gymStoreProperties)
                                 .concat(restarauntProperties)
+                                .concat(policeDepartments)
                                 .filter(property => property !== null && property !== undefined);;
         const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 

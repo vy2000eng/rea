@@ -120,6 +120,14 @@ export const MarkerWithInfo = (props: MarkerProps) => {
                 scale={1.2}
                 glyph={"🍽"} 
               /> :
+			  poi.type === "police_department" ? 
+              <Pin 
+                background={"#795548"} 
+                glyphColor={"white"} 
+                borderColor={"white"} 
+                scale={1.2}
+                glyph={"🚔"} 
+              /> :
               <Pin 
                 background={"#FBBC04"} 
                 glyphColor={"#000"} 

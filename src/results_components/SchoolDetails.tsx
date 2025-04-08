@@ -17,8 +17,8 @@ import {
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import CrimeChart from "./CrimeChart";
 
-
-import { CrimeData, PropertyInformation } from "@/Model/SchoolModel";
+import { CrimeData} from "@/Model/CrimeModel";
+import { PropertyInformation } from "@/Model/SchoolModel";
 const SchoolDetails = ({
 	properties, title
 }: {
