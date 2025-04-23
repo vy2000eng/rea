@@ -4,6 +4,7 @@ import { CrimeData } from "@/Model/CrimeModel"
 import { PropertyInformation } from "@/Model/SchoolModel"
 import { Text } from "@/Model/SchoolModel"
 import {v4 as uuidv4} from 'uuid';
+import { Property, RealEstateModel } from "@/Model/RealEstateModel"
 
 
 
@@ -45,5 +46,36 @@ export function parsePoliceDepartmentData(crimeData: CrimeData[]){
       propertyInformation.push (propertyIndex)
       })
   return propertyInformation
+}
+
+
+export function parseRealEstateData(realEstateData:Property[],propertyType:string){
+  let propertyInformation:PropertyInformation[] = []
+  realEstateData.forEach(x=>{
+    let text:Text = {
+      languageCode: "en",
+      text:x.address
+
+    }
+
+
+    let propertyIndex:PropertyInformation = {
+      id: uuidv4(),
+      displayName: text,
+      type:propertyType,
+      formattedAddress: x.price,
+      location:{
+        latitude: Number(x.latitude),
+        longitude: Number(x.longitude),
+
+      },
+      reviews:[]
+    }
+    propertyInformation.push(propertyIndex);
+  })
+  return propertyInformation
+
+
+
 }
 

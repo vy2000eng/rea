@@ -128,12 +128,30 @@ export const MarkerWithInfo = (props: MarkerProps) => {
                 scale={1.2}
                 glyph={"🚔"} 
               /> :
+        poi.type === "for_rent_listings" ? 
+              <Pin 
+                background={"#795548"} 
+                glyphColor={"white"} 
+                borderColor={"white"} 
+                scale={1.2}
+                glyph={"🏚️"} 
+              /> :
+        poi.type === "for_sale_listings" ? 
+            <Pin 
+              background={"#795548"} 
+              glyphColor={"white"} 
+              borderColor={"white"} 
+              scale={1.2}
+              glyph={"🏡"} 
+            /> :
+      
               <Pin 
                 background={"#FBBC04"} 
                 glyphColor={"#000"} 
                 borderColor={"#000"} 
                 scale={1.1}
               />
+              
            }
           
 				</AdvancedMarker>

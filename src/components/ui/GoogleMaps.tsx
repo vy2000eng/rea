@@ -35,7 +35,9 @@ export function GoogleMap(
         groceryStoreProperties   ,
         gymStoreProperties       ,
         restarauntProperties     ,
-        policeDepartments
+        policeDepartments        ,
+        forSaleProperties,
+        forRentProperties,
 
     }: 
     {
@@ -49,7 +51,9 @@ export function GoogleMap(
      groceryStoreProperties   : PropertyInformation[],
      gymStoreProperties       : PropertyInformation[],
      restarauntProperties     : PropertyInformation[],
-     policeDepartments: PropertyInformation[]
+     policeDepartments        : PropertyInformation[],
+     forSaleProperties        :PropertyInformation[],
+     forRentProperties        :PropertyInformation[]
 
 
     }) 
@@ -75,6 +79,8 @@ export function GoogleMap(
                                 .concat(gymStoreProperties)
                                 .concat(restarauntProperties)
                                 .concat(policeDepartments)
+                                .concat(forSaleProperties)
+                                .concat(forRentProperties)
                                 .filter(property => property !== null && property !== undefined);;
         const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 

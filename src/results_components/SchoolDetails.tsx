@@ -19,14 +19,20 @@ import CrimeChart from "./CrimeChart";
 
 import { CrimeData} from "@/Model/CrimeModel";
 import { PropertyInformation } from "@/Model/SchoolModel";
-const SchoolDetails = ({
-	properties, title
-}: {
-	properties: PropertyInformation[] | CrimeData[]
-  title:string
+import { Property, RealEstateModel } from "@/Model/RealEstateModel";
+import RealEstateDashboard from "@/components/RealEstateDashBoard";
+const SchoolDetails = ({properties, title}: {properties: PropertyInformation[] | CrimeData[] | Property[][],title:string
 }) => {
 	console.log("All properties:", properties);
 	console.log("School Information:", properties);
+  if (title === "Real Estate"){
+    return(
+                      <RealEstateDashboard allRealEstateData={properties as Property[][]}/>
+
+      
+      
+    )
+  }
 
   if (title === "Crime"){
     return(

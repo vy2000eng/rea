@@ -30,11 +30,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 
-import { parsePoliceDepartmentData } from "@/lib/utils";
+import { parsePoliceDepartmentData, parseRealEstateData } from "@/lib/utils";
 
 import { GoogleMap } from "@/components/ui/GoogleMaps";
 import {PropertyInformation } from "@/Model/SchoolModel";
 import { CrimeData, OffensesData } from "@/Model/CrimeModel";
+import { RealEstateModel } from "@/Model/RealEstateModel";
+import { Property } from "@/Model/RealEstateModel";
 
 export function SearchResults() {
   const {location}                                                = useParams                      (  );
@@ -48,18 +50,18 @@ export function SearchResults() {
   const [groceryStoreProperties   , setGroceryStoreProperties   ] = useState<PropertyInformation[]>([]);
   const [gymStoreProperties       , setGymProperties            ] = useState<PropertyInformation[]>([]);
   const [restarauntProperties     , setRestarauntProperties     ] = useState<PropertyInformation[]>([]);
-  const [activeProperties         , setActiveProperties         ] = useState<PropertyInformation[]| CrimeData[]>([]);
+  const [activeProperties         , setActiveProperties         ] = useState<PropertyInformation[] | CrimeData[]|Property[][]>([]);
   const [activeTitle              , setActiveTitle              ] = useState<string>("School Details" );
   const [loading                  , setLoading                  ] = useState(true                     );
   const [isDialogOpen             , setIsDialogOpen             ] = useState(false                    );
-  const [crimeData                , setCrimeData]                 = useState<CrimeData[]>([])
-  const[policeDepartments         ,setPoliceDepartments]          = useState<PropertyInformation[]>([]);
+  const [crimeData                , setCrimeData                ] = useState<CrimeData[]>([])
+  const [forSaleListings          , setForSaleListings          ] = useState<Property[]> ();
+  const [forRentListings          , setForRentLstings           ] = useState<Property[]> ();
+
   const isFirstMount                                              = useRef  (true                     ); 
-  //const d = [];
 
 
   useEffect(() => {
-    // Skip the second mount in development
     if (!isFirstMount.current) {
       return;
     }
@@ -73,8 +75,8 @@ export function SearchResults() {
             if (!response.ok) throw new Error    (`HTTP error! status: ${response.status}`                                      );
             const data     = await response.json (                                                                              );
             setSchoolProperties                  (data["schoolInformation"]                                                     );
-            setCorporateOfficeProperties         (data["corporateOfficeInformation"]                                                   );
-            setHospitalProperties                (data["hospitalInformation"]                                            );
+            setCorporateOfficeProperties         (data["corporateOfficeInformation"]                                            );
+            setHospitalProperties                (data["hospitalInformation"]                                                   );
             setBankProperties                    (data["bankInformation"]                                                       );
             setParkProperties                    (data["parksInformation"]                                                      );
             setPostOfficeProperties              (data["postOfficeInformation"]                                                 );
@@ -83,13 +85,12 @@ export function SearchResults() {
             setGymProperties                     (data["gymInformation"]                                                        );
             setRestarauntProperties              (data["restaurantInformation"]                                                 );
             setCrimeData                         (data["crimeInformation"]);
-            setLoading                           (false);
             setActiveProperties                  (data["schoolInformation"] )
+            setForSaleListings                   (data["forSaleListings"].props);
+            setForRentLstings                    (data["rentalListings"].props);
             setActiveTitle                       ("Universities")
-         
+            setLoading                           (false);
 
-
-            //console.log(activeProperties)
       } catch (error) {
             console.error("Error fetching properties:", error);
             setLoading(false);
@@ -100,29 +101,34 @@ export function SearchResults() {
   }, [location]);
 
   let policeDepartmentProperties:PropertyInformation[] = parsePoliceDepartmentData(crimeData)
-  // setPoliceDepartments( policeDepartmentProperties)
- // parsePoliceDepartmentData(crimeData)
+ let forRentProperties          :PropertyInformation[] = []
+ let forSaleProperties          :PropertyInformation[] = []
+  let allRealEstateData: Property[][] = []
 
+  if (forSaleListings && forRentListings){
+    forRentProperties = parseRealEstateData(forRentListings as Property[], "for_rent_listings");
+    forSaleProperties = parseRealEstateData(forSaleListings as Property [], "for_sale_listings");
+    allRealEstateData.push(forSaleListings)
+    allRealEstateData.push(forRentListings)
+  }
 
-
-
-  
-
-
+  console.log(allRealEstateData)
 
   const propertyCards = [
-    {title: "Universities      ", count: schoolProperties         .length, type: "schools"     ,data: schoolProperties          },
-    {title: "Hospitals"         , count: hospitalProperties       .length, type: "hospitals"   ,data: hospitalProperties        },
-    {title: "Corporate Offices" , count: corporateOfficeProperties.length, type: "offices"     ,data: corporateOfficeProperties },
-    {title: "Banks"             , count: bankProperties           .length, type: "banks"       ,data: bankProperties            },
-    {title: "Parks"             , count: parkProperties           .length, type: "parks"       ,data: parkProperties            },
-    {title: "Post Offices"      , count: postOfficeProperties     .length, type: "post offices",data: postOfficeProperties      },
-    {title: "Churches"          , count: churchesProperties       .length, type: "churches"    ,data: churchesProperties        },
-    {title: "GroceryStore"      , count: groceryStoreProperties   .length, type: "groceries"   ,data: groceryStoreProperties    },
-    {title: "Gyms"              , count: gymStoreProperties       .length, type: "gyms"        ,data: gymStoreProperties        },
-    {title: "Restaurants"       , count: restarauntProperties     .length, type: "restaurants" ,data: restarauntProperties      },
+    {title: "Universities      ", count: schoolProperties         .length, type: "schools"        ,data: schoolProperties          },
+    {title: "Hospitals"         , count: hospitalProperties       .length, type: "hospitals"      ,data: hospitalProperties        },
+    {title: "Corporate Offices" , count: corporateOfficeProperties.length, type: "offices"        ,data: corporateOfficeProperties },
+    {title: "Banks"             , count: bankProperties           .length, type: "banks"          ,data: bankProperties            },
+    {title: "Parks"             , count: parkProperties           .length, type: "parks"          ,data: parkProperties            },
+    {title: "Post Offices"      , count: postOfficeProperties     .length, type: "post offices"   ,data: postOfficeProperties      },
+    {title: "Churches"          , count: churchesProperties       .length, type: "churches"       ,data: churchesProperties        },
+    {title: "GroceryStore"      , count: groceryStoreProperties   .length, type: "groceries"      ,data: groceryStoreProperties    },
+    {title: "Gyms"              , count: gymStoreProperties       .length, type: "gyms"           ,data: gymStoreProperties        },
+    {title: "Restaurants"       , count: restarauntProperties     .length, type: "restaurants"    ,data: restarauntProperties      },
+    {title: "Crime"             , count: crimeData                .length, type: "Crime Agencies" ,data: crimeData                 },
+    {title: "Real Estate"       , count: 0                               , type: "realEstate"     ,data: allRealEstateData         }
 
-    {title: "Crime"             , count:crimeData.length      , type: "Crime Agencies" ,data: crimeData}
+
   ];
   if (loading) {
     return (
@@ -133,23 +139,24 @@ export function SearchResults() {
   }
   return (
     <>
-      <div className=" mx-auto space-y-6 relative bg-white">
+      <div className="mx-auto space-y-6 relative bg-white">
       
         {/* Map Section */}
         <div className="w-full h-full rounded-sm  border ">
           <GoogleMap 
-            schoolProperties          = {schoolProperties         }
-            hospitalProperties        = {hospitalProperties       }
-            corporateOfficeProperties = {corporateOfficeProperties}
-            bankProperties            = {bankProperties           }
-            parkProperties            = {parkProperties           }
-            postOfficeProperties      = {postOfficeProperties     }
-            churchesProperties        = {churchesProperties       }
-            groceryStoreProperties    = {groceryStoreProperties   }
-            gymStoreProperties        = {gymStoreProperties       }
-            restarauntProperties      = {restarauntProperties     }
-            policeDepartments =         {policeDepartmentProperties}
-          
+            schoolProperties          = {schoolProperties          }
+            hospitalProperties        = {hospitalProperties        }
+            corporateOfficeProperties = {corporateOfficeProperties }
+            bankProperties            = {bankProperties            }
+            parkProperties            = {parkProperties            }
+            postOfficeProperties      = {postOfficeProperties      }
+            churchesProperties        = {churchesProperties        }
+            groceryStoreProperties    = {groceryStoreProperties    }
+            gymStoreProperties        = {gymStoreProperties        }
+            restarauntProperties      = {restarauntProperties      }
+            policeDepartments         = {policeDepartmentProperties}
+            forSaleProperties         = {forSaleProperties         }
+            forRentProperties         = {forRentProperties         }
           />
         </div>
         <SchoolDetails properties={activeProperties} title= {activeTitle} />
@@ -169,13 +176,25 @@ export function SearchResults() {
                 >
                 <CardHeader>
                   <div className="flex items-center gap-2">
+                 
                     <CardTitle>{card.title}</CardTitle>
                   </div>
                 </CardHeader>
+
                 <CardContent>
-                  <p className="text-muted-foreground">
+                  {card.title == "Real Estate" ? (
+                    <p className="text-muted-foreground">
+                   
+                    Recently Sold, For Sale, accordion For Rent Properties
+                  </p>
+
+                  ): (
+                    <p className="text-muted-foreground">
+                   
                     {card.count} {card.type} found in the area
                   </p>
+                  )}
+                  
                 </CardContent>
               </Card>
               );
