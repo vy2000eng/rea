@@ -5,6 +5,7 @@ import {
 	CardTitle,
 	CardDescription,
 } from "@/components/ui/card";
+import { Tabs,TabsList,TabsTrigger } from "@radix-ui/react-tabs";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -27,7 +28,42 @@ const SchoolDetails = ({properties, title}: {properties: PropertyInformation[] |
 	console.log("School Information:", properties);
   if (title === "Real Estate"){
     return(
-                      <RealEstateDashboard allRealEstateData={properties as Property[][]}/>
+
+// Just add these style classes to your existing components
+<Tabs defaultValue="for-sale" className="w-full">
+  <TabsList className="grid grid-cols-2 gap-4 mb-8" style={{ backgroundColor: "transparent", padding: 0, boxShadow: "none" }}>
+    <TabsTrigger 
+      value="for-sale" 
+      style={{ 
+        backgroundColor: "white", 
+        color: "#374151", 
+        border: "1px solid #e5e7eb", 
+        borderRadius: "0.375rem",
+        padding: "0.75rem" 
+      }}
+      className="hover:bg-gray-50 data-[state=active]:border-blue-600 data-[state=active]:text-blue-700 font-medium"
+    >
+      For Sale
+    </TabsTrigger>
+    <TabsTrigger 
+      value="for-rent" 
+      style={{ 
+        backgroundColor: "white", 
+        color: "#374151", 
+        border: "1px solid #e5e7eb", 
+        borderRadius: "0.375rem",
+        padding: "0.75rem" 
+      }}
+      className="hover:bg-gray-50 data-[state=active]:border-blue-600 data-[state=active]:text-blue-700 font-medium"
+    >
+      For Rent
+    </TabsTrigger>
+  </TabsList> 
+  <h1 className="text-3xl font-bold mb-6">Real Estate Market Overview</h1>
+  <ScrollArea className="h-dvh">
+    <RealEstateDashboard allRealEstateData={properties as Property[][]}/>
+  </ScrollArea>
+</Tabs>
 
       
       

@@ -5,12 +5,18 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Home, Bed, Bath, DollarSign, Calendar, ArrowRight, ArrowLeft, MapPin } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { useParams } from 'react-router-dom';
 
 import { Property, RealEstateModel } from '@/Model/RealEstateModel';
+import { ScrollArea } from '@radix-ui/react-scroll-area';
+
+
 
 
 
 const PropertyCard = ({ property }: { property: Property }) => {
+
+
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
     const hasPhotos = property.carouselPhotos && property.carouselPhotos.length > 0;
     
@@ -138,41 +144,75 @@ const PropertyCard = ({ property }: { property: Property }) => {
   const RealEstateDashboard = ({ allRealEstateData }: { allRealEstateData: Property[][] }) => {
     // Define labels for each property group
     const categories = [ "For Sale", "For Rent"];
+    const [properties, setProperties] = useState<Property[][]>(allRealEstateData);
+    const [page, setPage] = useState(2);
+    const [isLoading, setIsLoading] = useState(false);
+    const [hasMore, setHasMore] = useState(true); 
+    const { location } = useParams();
+  
+    const loadMoreProperties = async (catergoryIndex:number) => {
+      if (isLoading || !location) return;
+      
+      setIsLoading(true);
+      try {
+        const response = await fetch(`${import.meta.env.VITE_GET_MORE_REAL_ESTATE_DATA}${import.meta.env.VITE_GET_MORE_REAL_ESTATE_DATA_PARAM_1}=${encodeURIComponent(location)}&${import.meta.env.VITE_GET_MORE_REAL_ESTATE_DATA_PARAM_2}=${catergoryIndex}&${import.meta.env.VITE_GET_MORE_REAL_ESTATE_DATA_PARAM_3}=${page}`);
+        const data = await response.json();
+        
+        setProperties(prev => {
+          const newProperties = [...prev];
+          if (newProperties[catergoryIndex]) {
+            newProperties[catergoryIndex] = [...newProperties[catergoryIndex], ...data["moreListings"].props];
+          }
+          return newProperties;
+        });
+        setPage(page + 1);
+        
+      } catch (error) {
+        console.error("Error loading more properties:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
     
     return (
       <div className="container mx-auto p-4">
-        <h1 className="text-3xl font-bold mb-6">Real Estate Market Overview</h1>
-        
-        <Tabs defaultValue="for-sale" className="w-full">
-          <TabsList className="grid grid-cols-2 mb-8">
-            {/* <TabsTrigger value="recently-sold">Recently Sold</TabsTrigger> */}
-            <TabsTrigger value="for-sale">For Sale</TabsTrigger>
-            <TabsTrigger value="for-rent">For Rent</TabsTrigger>
-          </TabsList>
           
           {/* Individual Category Tabs */}
-          {categories.map((category, index) => (
-            <TabsContent key={category} value={category.toLowerCase().replace(' ', '-')}>
-              <div className="mb-6">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-2xl font-semibold">{category}</h2>
-                  <Badge variant="outline" className="text-sm">
-                    {allRealEstateData[index]?.length || 0} Properties
-                  </Badge>
+            {categories.map((category, index) => (
+                <TabsContent key={category} value={category.toLowerCase().replace(' ', '-')}>
+                <div className="mb-6">
+                    <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-2xl font-semibold">{category}</h2>
+                    <Badge variant="outline" className="text-sm">
+                        {properties[index]?.length || 0} Properties
+                    </Badge>
+                    </div>
+
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                    {properties[index]?.map((property, propertyIndex) => (
+                        <PropertyCard 
+                        key={property.zpid || `property-${propertyIndex}`} 
+                        property={property} 
+                        />
+                    ))}
+
+                    </div>
+
                 </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {allRealEstateData[index]?.map((property, propertyIndex) => (
-                    <PropertyCard 
-                      key={property.zpid || `property-${propertyIndex}`} 
-                      property={property} 
-                    />
-                  ))}
+                <div className="flex justify-center mt-6">
+                    <button 
+                        onClick={() =>  loadMoreProperties(index)}
+                        disabled={isLoading}
+                        className="px-5 py-2 bg-blue-600 text-white rounded-md disabled:opacity-50"
+                    >
+                        {isLoading ? "Loading..." : "Load More Properties"}
+                    </button>
                 </div>
-              </div>
-            </TabsContent>
-          ))}
-        </Tabs>
+                </TabsContent>
+            ))}
+        {/* </Tabs> */}
       </div>
     );
   };

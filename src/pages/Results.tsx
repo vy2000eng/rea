@@ -71,7 +71,7 @@ export function SearchResults() {
       if (!location) return;
       try {
             setLoading                           (true                                                                          );
-            const response = await fetch         (`${import.meta.env.VITE_GET_LOCATION_ENDPOINT}${encodeURIComponent(location)}`);
+            const response = await fetch         (`${import.meta.env.VITE_TEST_LOCATIONENPOINT}${encodeURIComponent(location)}`);
             if (!response.ok) throw new Error    (`HTTP error! status: ${response.status}`                                      );
             const data     = await response.json (                                                                              );
             setSchoolProperties                  (data["schoolInformation"]                                                     );
