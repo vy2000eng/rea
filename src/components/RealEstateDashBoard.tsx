@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 
 import { Property, RealEstateModel } from '@/Model/RealEstateModel';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
+import { useAuth } from '@/context/AuthContext';
 
 
 
@@ -149,19 +150,25 @@ const PropertyCard = ({ property }: { property: Property }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true); 
     const { location } = useParams();
+    const{accessToken} = useAuth()
   
     const loadMoreProperties = async (catergoryIndex:number) => {
       if (isLoading || !location) return;
       
       setIsLoading(true);
       try {
-        const response = await fetch(`${import.meta.env.VITE_GET_MORE_REAL_ESTATE_DATA}${import.meta.env.VITE_GET_MORE_REAL_ESTATE_DATA_PARAM_1}=${encodeURIComponent(location)}&${import.meta.env.VITE_GET_MORE_REAL_ESTATE_DATA_PARAM_2}=${catergoryIndex}&${import.meta.env.VITE_GET_MORE_REAL_ESTATE_DATA_PARAM_3}=${page}`);
+        const response = await fetch(`${import.meta.env.VITE_GET_MORE_REAL_ESTATE_DATA}${import.meta.env.VITE_GET_MORE_REAL_ESTATE_DATA_PARAM_1}=${encodeURIComponent(location)}&${import.meta.env.VITE_GET_MORE_REAL_ESTATE_DATA_PARAM_2}=${catergoryIndex}&${import.meta.env.VITE_GET_MORE_REAL_ESTATE_DATA_PARAM_3}=${page}`,{
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+              }
+        });
         const data = await response.json();
         
         setProperties(prev => {
           const newProperties = [...prev];
           if (newProperties[catergoryIndex]) {
             newProperties[catergoryIndex] = [...newProperties[catergoryIndex], ...data["moreListings"].props];
+            allRealEstateData.push(data["moreListings"].props);
           }
           return newProperties;
         });

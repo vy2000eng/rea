@@ -37,8 +37,10 @@ import {PropertyInformation } from "@/Model/SchoolModel";
 import { CrimeData, OffensesData } from "@/Model/CrimeModel";
 import { RealEstateModel } from "@/Model/RealEstateModel";
 import { Property } from "@/Model/RealEstateModel";
+import { useAuth } from "@/context/AuthContext";
 
-export function SearchResults() {
+export function SearchResults({isSample}: { isSample: boolean }) {
+  const{accessToken} = useAuth()
   const {location}                                                = useParams                      (  );
   const [schoolProperties         , setSchoolProperties         ] = useState<PropertyInformation[]>([]);
   const [hospitalProperties       , setHospitalProperties       ] = useState<PropertyInformation[]>([]);
@@ -68,10 +70,19 @@ export function SearchResults() {
     isFirstMount.current  = false;
 
     const fetchProperties = async () => {
-      if (!location) return;
+      if (!isSample && !location) return;
       try {
             setLoading                           (true                                                                          );
-            const response = await fetch         (`${import.meta.env.VITE_TEST_LOCATIONENPOINT}${encodeURIComponent(location)}`);
+           const endpoint = isSample
+           ?`${import.meta.env.VITE_TEST_LOCATIONENPOINT}`
+           :`${import.meta.env.VITE_GET_LOCATION_ENDPOINT}${encodeURIComponent(location!)}`
+
+            const response = await fetch         (endpoint,{
+              headers: {
+                'Authorization': `Bearer ${accessToken}`
+              }
+            }
+            );
             if (!response.ok) throw new Error    (`HTTP error! status: ${response.status}`                                      );
             const data     = await response.json (                                                                              );
             setSchoolProperties                  (data["schoolInformation"]                                                     );
