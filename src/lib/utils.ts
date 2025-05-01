@@ -4,7 +4,7 @@ import { CrimeData } from "@/Model/CrimeModel"
 import { PropertyInformation } from "@/Model/SchoolModel"
 import { Text } from "@/Model/SchoolModel"
 import {v4 as uuidv4} from 'uuid';
-import { Property, RealEstateModel } from "@/Model/RealEstateModel"
+import { Property, } from "@/Model/RealEstateModel"
 
 
 
@@ -18,7 +18,6 @@ export function parsePoliceDepartmentData(crimeData: CrimeData[]){
   
   
   let propertyInformation:PropertyInformation[] = []
-  let propertyInformationSet = new Set<String>()
  
 
   crimeData.forEach(crime => {

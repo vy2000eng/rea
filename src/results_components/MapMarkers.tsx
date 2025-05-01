@@ -1,25 +1,13 @@
-import { useState, useCallback, useRef, useEffect, useMemo } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import {
 	AdvancedMarker,
 	Pin,
-	useAdvancedMarkerRef,
 	InfoWindow,
 	useMap,
 } from "@vis.gl/react-google-maps";
 import { Poi } from "@/components/ui/GoogleMaps";
 import { type Marker, MarkerClusterer } from "@googlemaps/markerclusterer";
-import { 
-  GraduationCap, 
-  Hospital, 
-  Building2, 
-  Landmark, 
-  Trees, 
-  Mailbox, 
-  Church, 
-  ShoppingCart, 
-  Dumbbell, 
-  Utensils 
-} from "lucide-react";
+
 
 export type MarkerProps = {
 	poi: Poi;
@@ -28,7 +16,6 @@ export type MarkerProps = {
 };
 export const MarkerWithInfo = (props: MarkerProps) => {
 	const { poi, onClick, setMarkerRef } = props;
-	const [infoWindowShown, setInfoWindowShown] = useState(false);
 	const ref = useCallback(
 		(marker: google.maps.marker.AdvancedMarkerElement) =>
 			setMarkerRef(marker, poi.key),

@@ -1,26 +1,20 @@
 import {
 	Card,
 	CardContent,
-	CardHeader,
-	CardTitle,
-	CardDescription,
+
 } from "@/components/ui/card";
 import { Tabs,TabsList,TabsTrigger } from "@radix-ui/react-tabs";
-import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
 	School as SchoolIcon,
-	MapPin,
-	Star,
-	StarHalf,
-	Clock,
+	MapPin
 } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import CrimeChart from "./CrimeChart";
 
 import { CrimeData} from "@/Model/CrimeModel";
 import { PropertyInformation } from "@/Model/SchoolModel";
-import { Property, RealEstateModel } from "@/Model/RealEstateModel";
+import { Property} from "@/Model/RealEstateModel";
 import RealEstateDashboard from "@/components/RealEstateDashBoard";
 const SchoolDetails = ({properties, title}: {properties: PropertyInformation[] | CrimeData[] | Property[][],title:string
 }) => {

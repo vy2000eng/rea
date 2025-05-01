@@ -1,7 +1,5 @@
 "use client"
-import * as React from "react"
-//import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
-import { Bar, BarChart, CartesianGrid, XAxis,YAxis } from "recharts"
+import {CartesianGrid, XAxis,YAxis } from "recharts"
 import { CrimeDataPoint } from "@/Model/CrimeModel"
 
 import {
@@ -13,14 +11,12 @@ import {
   CardFooter,
 } from "@/components/ui/card"
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-import { CrimeData,OffensesData } from "@/Model/CrimeModel"
-import { PropertyInformation } from "@/Model/SchoolModel"
-import { ChartLegend, ChartLegendContent, } from "@/components/ui/chart"
+import { CrimeData} from "@/Model/CrimeModel"
+
 import { Legend } from "recharts"
 
 import {
@@ -30,7 +26,7 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select"
-  import { generateChartConfig, type CrimeChartConfig } from "@/utils/chartConfig"
+  import { generateChartConfig } from "@/utils/chartConfig"
 
   import {  Line, LineChart } from "recharts"
   import { TrendingUp } from "lucide-react"

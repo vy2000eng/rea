@@ -1,6 +1,5 @@
 // src/context/AuthContext.tsx
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import React from 'react';
 
 interface AuthContextType {
  //user: any;
@@ -56,10 +55,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       localStorage.setItem('user', JSON.stringify(data.user));
       setAccessToken(data.accessToken);
       setRefreshToken(data.refreshToken);
-     // setUser(data.user);
       console.log(data.accessToken);
       console.log(data.refreshToken);
-     // console.log(data.user);
     } else {
       throw new Error(data.message);
     }

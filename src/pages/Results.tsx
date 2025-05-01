@@ -1,41 +1,21 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import   SchoolDetails from "@/results_components/SchoolDetails";
-import CrimeChart from "@/results_components/CrimeChart";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogClose,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+
+
 
 import { parsePoliceDepartmentData, parseRealEstateData } from "@/lib/utils";
 
 import { GoogleMap } from "@/components/ui/GoogleMaps";
 import {PropertyInformation } from "@/Model/SchoolModel";
-import { CrimeData, OffensesData } from "@/Model/CrimeModel";
-import { RealEstateModel } from "@/Model/RealEstateModel";
+import { CrimeData} from "@/Model/CrimeModel";
 import { Property } from "@/Model/RealEstateModel";
 import { useAuth } from "@/context/AuthContext";
 
@@ -55,7 +35,6 @@ export function SearchResults({isSample}: { isSample: boolean }) {
   const [activeProperties         , setActiveProperties         ] = useState<PropertyInformation[] | CrimeData[]|Property[][]>([]);
   const [activeTitle              , setActiveTitle              ] = useState<string>("School Details" );
   const [loading                  , setLoading                  ] = useState(true                     );
-  const [isDialogOpen             , setIsDialogOpen             ] = useState(false                    );
   const [crimeData                , setCrimeData                ] = useState<CrimeData[]>([])
   const [forSaleListings          , setForSaleListings          ] = useState<Property[]> ();
   const [forRentListings          , setForRentLstings           ] = useState<Property[]> ();
@@ -181,7 +160,6 @@ export function SearchResults({isSample}: { isSample: boolean }) {
                   onClick={() => {
                       setActiveProperties(card.data);
                       setActiveTitle     (card.title);
-                      setIsDialogOpen    (true);
                     }
                   }
                 >
