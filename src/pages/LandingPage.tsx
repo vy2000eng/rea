@@ -1,8 +1,5 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { Index } from './Index';
 import { Button } from '@/components/ui/button';
-import { MailOpen } from "lucide-react"
 import { AuthForm } from '@/components/auth_form';
 
 

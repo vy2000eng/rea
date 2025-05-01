@@ -5,7 +5,6 @@ import './App.css'
 import { Index } from './pages/Index'
 import { SearchResults } from './pages/Results'
 import LandingPage from "./pages/LandingPage"
-//import LoginPage from "./pages/Login"
 import LoginForm from "./components/auth_form"
 import { AuthProvider } from './context/AuthContext';
 import RequireAuth from "./context/RequireAuth"

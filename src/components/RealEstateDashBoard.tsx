@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState,  } from 'react';
+import {TabsContent} from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Home, Bed, Bath, DollarSign, Calendar, ArrowRight, ArrowLeft, MapPin } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
+import { Home, Bed, Bath, DollarSign, ArrowRight, ArrowLeft, MapPin } from "lucide-react";
 import { useParams } from 'react-router-dom';
-
-import { Property, RealEstateModel } from '@/Model/RealEstateModel';
-import { ScrollArea } from '@radix-ui/react-scroll-area';
+import { Property } from '@/Model/RealEstateModel';
 import { useAuth } from '@/context/AuthContext';
 
 
@@ -148,7 +145,6 @@ const PropertyCard = ({ property }: { property: Property }) => {
     const [properties, setProperties] = useState<Property[][]>(allRealEstateData);
     const [page, setPage] = useState(2);
     const [isLoading, setIsLoading] = useState(false);
-    const [hasMore, setHasMore] = useState(true); 
     const { location } = useParams();
     const{accessToken} = useAuth()
   
