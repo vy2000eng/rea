@@ -96,6 +96,13 @@ button:focus-visible {
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --chart-6: 290 70% 50%;  /* Purple */
+--chart-7: 140 60% 45%;  /* Green */
+--chart-8: 220 70% 55%;  /* Blue */
+--chart-9: 320 65% 60%;  /* Pink */
+--chart-10: 80 65% 45%;  /* Lime */
+--chart-11: 260 60% 55%; /* Violet */
+--chart-12: 190 75% 50%; /* Light Blue */
     --radius: 0.5rem;
   }
   .dark {

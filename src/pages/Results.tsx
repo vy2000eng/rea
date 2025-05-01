@@ -1,230 +1,217 @@
-import { useParams } from "react-router-dom"
-import { useEffect, useState ,useRef} from "react"
-import SchoolDetails from "@/results_components/SchoolDetails";
+import { useParams } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
+import   SchoolDetails from "@/results_components/SchoolDetails";
+import CrimeChart from "@/results_components/CrimeChart";
 import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-    CardDescription
-  } from "@/components/ui/card";
-  import { Badge } from "@/components/ui/badge";
-  import { ScrollArea } from "@/components/ui/scroll-area";
-  import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select";
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-  import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-    DialogClose,
-  } from "@/components/ui/dialog";
-  import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 
-  import { 
-    School, 
-    MapPin, 
-    Star,
-    StarHalf,
-    Clock
-  } from "lucide-react";
+import { parsePoliceDepartmentData, parseRealEstateData } from "@/lib/utils";
 
 import { GoogleMap } from "@/components/ui/GoogleMaps";
-import { SchoolInformation } from "@/Model/SchoolModel";
-import { GeoCachedLocation } from "@/Model/SchoolModel";
-//import SchoolDetails from "@/results_components/SchoolDetails";
+import {PropertyInformation } from "@/Model/SchoolModel";
+import { CrimeData, OffensesData } from "@/Model/CrimeModel";
+import { RealEstateModel } from "@/Model/RealEstateModel";
+import { Property } from "@/Model/RealEstateModel";
+import { useAuth } from "@/context/AuthContext";
+
+export function SearchResults({isSample}: { isSample: boolean }) {
+  const{accessToken} = useAuth()
+  const {location}                                                = useParams                      (  );
+  const [schoolProperties         , setSchoolProperties         ] = useState<PropertyInformation[]>([]);
+  const [hospitalProperties       , setHospitalProperties       ] = useState<PropertyInformation[]>([]);
+  const [corporateOfficeProperties, setCorporateOfficeProperties] = useState<PropertyInformation[]>([]);
+  const [bankProperties           , setBankProperties           ] = useState<PropertyInformation[]>([]);
+  const [parkProperties           , setParkProperties           ] = useState<PropertyInformation[]>([]);
+  const [postOfficeProperties     , setPostOfficeProperties     ] = useState<PropertyInformation[]>([]);
+  const [churchesProperties       , setChurchesProperties       ] = useState<PropertyInformation[]>([]);
+  const [groceryStoreProperties   , setGroceryStoreProperties   ] = useState<PropertyInformation[]>([]);
+  const [gymStoreProperties       , setGymProperties            ] = useState<PropertyInformation[]>([]);
+  const [restarauntProperties     , setRestarauntProperties     ] = useState<PropertyInformation[]>([]);
+  const [activeProperties         , setActiveProperties         ] = useState<PropertyInformation[] | CrimeData[]|Property[][]>([]);
+  const [activeTitle              , setActiveTitle              ] = useState<string>("School Details" );
+  const [loading                  , setLoading                  ] = useState(true                     );
+  const [isDialogOpen             , setIsDialogOpen             ] = useState(false                    );
+  const [crimeData                , setCrimeData                ] = useState<CrimeData[]>([])
+  const [forSaleListings          , setForSaleListings          ] = useState<Property[]> ();
+  const [forRentListings          , setForRentLstings           ] = useState<Property[]> ();
+
+  const isFirstMount                                              = useRef  (true                     ); 
 
 
-
-// export type SchoolInformation = {
-//     id: number,
-//     displayName: Text,
-//     formattedAddress:string,
-//     location: {   
-//         latitude: number, 
-//         longitude: number
-//     },
-//     reviews: Review []
-
-
-// }
-// export type Review = {
-
-//     id:number,
-//     authorAttribution: AuthorAttribution,
-//     name: string,
-//     relativePublishTimeDescription: string,
-//     rating: number,
-//     originalText:Text,
-
-
-
-// }
-
-// export type AuthorAttribution = {
-//     displayName: string,
-//     photoUri: string,
-//     uri: string
-
-// }
-
-// export type Text = {
-//     languageCode: string,
-//     text: string,
-// }
-
-// export type GeoCachedLocation = {
-//   formatted_address :string,
-//   latitude: number,
-//   longitude:number
-// }
-
-
-
-
-export function SearchResults() {
-    const { location } = useParams()
-    const [properties, setProperties] = useState<SchoolInformation[]>([])
-   // const [geoCachcedLocation, setGeoCachedLocation] = useState<GeoCachedLocation>()
-    const [loading, setLoading] = useState(true)
-    //const [sortOrder, setSortOrder] = useState('rating');
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-
-    const isFirstMount = useRef(true);  // Track first mount
-
-    useEffect(() => {
-        // Skip the second mount in development
-        if (!isFirstMount.current) {
-            return;
-        }
-        isFirstMount.current = false;
-
-        const fetchProperties = async () => {
-            if (!location) return;
-            try {
-                setLoading(true);
-              
-
-
-                const response = await fetch(
-                    `${import.meta.env.VITE_GET_LOCATION_ENDPOINT}${encodeURIComponent(location)}`
-                );
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                const data = await response.json();
-                setProperties(data["schoolInformation"])
-
-
-            
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching properties:', error);
-                setLoading(false);
-            }
-        };
-
-        fetchProperties();
-    }, [location]);
-
-    console.log("school info",properties)
-
-    // type Poi ={ key: string, location: google.maps.LatLngLiteral }
-    // const locations: Poi[] = properties.map((locationInformation) =>(
-    //     {
-    //       key: locationInformation.displayName.text,
-    //       location:{lat: locationInformation.location.latitude, lng:locationInformation.location.longitude}
-    //      }
-    // ))
-
-
-
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center h-96">
-                <div className="text-lg">Loading schools...</div>
-            </div>
-        );
+  useEffect(() => {
+    if (!isFirstMount.current) {
+      return;
     }
+    isFirstMount.current  = false;
 
+    const fetchProperties = async () => {
+      if (!isSample && !location) return;
+      try {
+            setLoading                           (true                                                                          );
+           const endpoint = isSample
+           ?`${import.meta.env.VITE_TEST_LOCATIONENPOINT}`
+           :`${import.meta.env.VITE_GET_LOCATION_ENDPOINT}${encodeURIComponent(location!)}`
+
+            const response = await fetch         (endpoint,{
+              headers: {
+                'Authorization': `Bearer ${accessToken}`
+              }
+            }
+            );
+            if (!response.ok) throw new Error    (`HTTP error! status: ${response.status}`                                      );
+            const data     = await response.json (                                                                              );
+            setSchoolProperties                  (data["schoolInformation"]                                                     );
+            setCorporateOfficeProperties         (data["corporateOfficeInformation"]                                            );
+            setHospitalProperties                (data["hospitalInformation"]                                                   );
+            setBankProperties                    (data["bankInformation"]                                                       );
+            setParkProperties                    (data["parksInformation"]                                                      );
+            setPostOfficeProperties              (data["postOfficeInformation"]                                                 );
+            setChurchesProperties                (data["churchInformation"]                                                     );
+            setGroceryStoreProperties            (data["groceryStoreInformation"]                                               );
+            setGymProperties                     (data["gymInformation"]                                                        );
+            setRestarauntProperties              (data["restaurantInformation"]                                                 );
+            setCrimeData                         (data["crimeInformation"]);
+            setActiveProperties                  (data["schoolInformation"] )
+            setForSaleListings                   (data["forSaleListings"].props);
+            setForRentLstings                    (data["rentalListings"].props);
+            setActiveTitle                       ("Universities")
+            setLoading                           (false);
+
+      } catch (error) {
+            console.error("Error fetching properties:", error);
+            setLoading(false);
+      }
+    };
+
+    fetchProperties();
+  }, [location]);
+
+  let policeDepartmentProperties:PropertyInformation[] = parsePoliceDepartmentData(crimeData)
+ let forRentProperties          :PropertyInformation[] = []
+ let forSaleProperties          :PropertyInformation[] = []
+  let allRealEstateData: Property[][] = []
+
+  if (forSaleListings && forRentListings){
+    forRentProperties = parseRealEstateData(forRentListings as Property[], "for_rent_listings");
+    forSaleProperties = parseRealEstateData(forSaleListings as Property [], "for_sale_listings");
+    allRealEstateData.push(forSaleListings)
+    allRealEstateData.push(forRentListings)
+  }
+
+  console.log(allRealEstateData)
+
+  const propertyCards = [
+    {title: "Universities      ", count: schoolProperties         .length, type: "schools"        ,data: schoolProperties          },
+    {title: "Hospitals"         , count: hospitalProperties       .length, type: "hospitals"      ,data: hospitalProperties        },
+    {title: "Corporate Offices" , count: corporateOfficeProperties.length, type: "offices"        ,data: corporateOfficeProperties },
+    {title: "Banks"             , count: bankProperties           .length, type: "banks"          ,data: bankProperties            },
+    {title: "Parks"             , count: parkProperties           .length, type: "parks"          ,data: parkProperties            },
+    {title: "Post Offices"      , count: postOfficeProperties     .length, type: "post offices"   ,data: postOfficeProperties      },
+    {title: "Churches"          , count: churchesProperties       .length, type: "churches"       ,data: churchesProperties        },
+    {title: "GroceryStore"      , count: groceryStoreProperties   .length, type: "groceries"      ,data: groceryStoreProperties    },
+    {title: "Gyms"              , count: gymStoreProperties       .length, type: "gyms"           ,data: gymStoreProperties        },
+    {title: "Restaurants"       , count: restarauntProperties     .length, type: "restaurants"    ,data: restarauntProperties      },
+    {title: "Crime"             , count: crimeData                .length, type: "Crime Agencies" ,data: crimeData                 },
+    {title: "Real Estate"       , count: 0                               , type: "realEstate"     ,data: allRealEstateData         }
+
+
+  ];
+  if (loading) {
     return (
-         
-        <>
-        <div className="max-w-6xl mx-auto p-4 space-y-6">
-          {/* Map Section */}
-          <div className="w-full h-[32rem] rounded-lg overflow-hidden border">
-            <GoogleMap properties={properties} />
-          </div>
-          
-          {/* Cards Grid */}
-          <div className="grid md:grid-cols-3 gap-6">
-            {/* Location Card */}
-            <Card 
-              className="cursor-pointer hover:shadow-lg transition-shadow"
-              onClick={() => setIsDialogOpen(true)}
-            >
-              <CardHeader>
-                <div className="flex items-center gap-2">
-                  <School className="h-5 w-5" />
-                  <CardTitle>School Information</CardTitle>
+      <div className="flex items-center justify-center h-96">
+        <div className="text-lg">Loading schools...</div>
+      </div>
+    );
+  }
+  return (
+    <>
+      <div className="mx-auto space-y-6 relative bg-white">
+      
+        {/* Map Section */}
+        <div className="w-full h-full rounded-sm  border ">
+          <GoogleMap 
+            schoolProperties          = {schoolProperties          }
+            hospitalProperties        = {hospitalProperties        }
+            corporateOfficeProperties = {corporateOfficeProperties }
+            bankProperties            = {bankProperties            }
+            parkProperties            = {parkProperties            }
+            postOfficeProperties      = {postOfficeProperties      }
+            churchesProperties        = {churchesProperties        }
+            groceryStoreProperties    = {groceryStoreProperties    }
+            gymStoreProperties        = {gymStoreProperties        }
+            restarauntProperties      = {restarauntProperties      }
+            policeDepartments         = {policeDepartmentProperties}
+            forSaleProperties         = {forSaleProperties         }
+            forRentProperties         = {forRentProperties         }
+          />
+        </div>
+        <SchoolDetails properties={activeProperties} title= {activeTitle} />
 
-                </div>
-              </CardHeader>
-              <CardContent>
-                  <p className="text-muted-foreground">
-                  {properties.length} schools found in the area
+      <div className="grid md:grid-cols-5 gap-6">
+            {propertyCards.map(card => {
+              return (
+                <Card
+                  key={card.title}
+                  className="cursor-pointer hover:shadow-lg transition-shadow"
+                  onClick={() => {
+                      setActiveProperties(card.data);
+                      setActiveTitle     (card.title);
+                      setIsDialogOpen    (true);
+                    }
+                  }
+                >
+                <CardHeader>
+                  <div className="flex items-center gap-2">
+                 
+                    <CardTitle>{card.title}</CardTitle>
+                  </div>
+                </CardHeader>
 
+                <CardContent>
+                  {card.title == "Real Estate" ? (
+                    <p className="text-muted-foreground">
+                   
+                    Recently Sold, For Sale, accordion For Rent Properties
                   </p>
 
-
-             
-              </CardContent>
-            </Card>
-  
-            {/* Property Details Card */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Property Details</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">Property information here</p>
-              </CardContent>
-            </Card>
-  
-            {/* Contact Card */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Contact</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">Contact information here</p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-  
-        {/* Dialog/Popup */}
-       {/* Dialog/Popup */}
-       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="sm:max-w-[800px] h-[90vh] overflow-y-auto">
-            <DialogHeader>
-                <div className="flex justify-between items-center">
-                    <DialogTitle>School Details</DialogTitle>
+                  ): (
+                    <p className="text-muted-foreground">
                    
-                </div>
-            </DialogHeader>
-                <SchoolDetails properties={properties} />
-            
-            
-          </DialogContent>
-        </Dialog>
-      </>
-    );
+                    {card.count} {card.type} found in the area
+                  </p>
+                  )}
+                  
+                </CardContent>
+              </Card>
+              );
+            })}
+      </div>
+    </div>
+    </>
+  );
 }
