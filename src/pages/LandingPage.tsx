@@ -69,7 +69,7 @@ const LandingPage = () => {
                   {/* Property Listings Screenshot */}
                   <div className="relative w-full h-64 bg-gray-200">
                     <img 
-                      src="src/assets/landing_page_pictures/real_estate_for_Rent_data.png" 
+                      src="public/landing_page_pictures/real_estate_for_Rent_data.png" 
                       alt="Property listings showing homes for rent and sale" 
                       className="w-full h-full object-cover"
                     />
@@ -104,7 +104,7 @@ const LandingPage = () => {
                   {/* Map Screenshot */}
                   <div className="relative w-full h-64 bg-gray-200">
                     <img 
-                      src="src/assets/landing_page_pictures/map_with_all_locations.png" 
+                      src="public/landing_page_pictures/map_with_all_locations.png" 
                       alt="Interactive map with location markers" 
                       className="w-full h-full object-cover"
                     />
@@ -173,7 +173,7 @@ const LandingPage = () => {
                   {/* University Screenshot */}
                   <div className="relative w-full h-64 bg-gray-200">
                     <img 
-                      src="src/assets/landing_page_pictures/map_with_universities.png" 
+                      src="public/landing_page_pictures/map_with_universities.png" 
                       alt="List of universities in the area" 
                       className="w-full h-full object-cover"
                     />
@@ -207,7 +207,7 @@ const LandingPage = () => {
                   {/* Crime Chart Screenshot */}
                   <div className="relative w-full h-64 bg-gray-200">
                     <img 
-                      src="src/assets/landing_page_pictures/crime_stats.png" 
+                      src="public/landing_page_pictures/crime_stats.png" 
                       alt="Crime rate trends chart" 
                       className="w-full h-full object-cover"
                     />
