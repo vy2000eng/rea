@@ -150,88 +150,82 @@ const CrimeChart = ({crimeData}: {crimeData:CrimeData[]}) =>{
             .slice(0, 3);
 
 
-        return (
-                <Card>
-                <CardHeader>
-                    <CardTitle>Crime Rates</CardTitle>
-                    <CardDescription>Monthly Crime Data</CardDescription>
-                    <Select onValueChange={selectCategory}>
-                    <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Agencies" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {Object.keys(chartConfig).map((key) => (
-                            <SelectItem 
-                                        key={key} 
-                                        value= {chartConfig[key].label}
-                                        >
-                                {chartConfig[key].label}
-                            </SelectItem>
-
-                        ))}
-                    </SelectContent>
-                    </Select>
-                </CardHeader>
-                <CardContent>
-                    <ChartContainer config={chartConfig}>
-                    <LineChart
-                        accessibilityLayer
-                        data={cData}
-                        margin={{
-                        left: 20,
-                        right: 20,
-                        top: 20,
-                        bottom: 20
-                        }}
-                    >
-                    <CartesianGrid vertical={false} />
-                        <XAxis
-                            dataKey="date"
-                            tickLine={false}
-                            axisLine={false}
-                            tickMargin={8}
-                           // interval="preserveStartEnd" // Show at least start and end ticks
-                        />
-                        <YAxis 
-                            domain={[0, 'auto']}
-                            tickLine={false}
-                            axisLine={false}
-                            tickMargin={8}
-                        />
-                        <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-                        <Legend />
-                        {keysToDisplay.map((key) => (
-                            <Line
-                                key={key}
-                                dataKey={key}
-                                type="monotone"
-                                stroke={chartConfig[key].color}
-                                strokeWidth={1}
-                                activeDot={{ r: 10 }}
-                                connectNulls={true}
-                                isAnimationActive={false}
-                                dot={false} 
-
-                            />
-                            ))}
-                        
-                    </LineChart>
-                    </ChartContainer>
-                </CardContent>
-                <CardFooter>
-                    <div className="flex w-full items-start gap-2 text-sm">
-                    <div className="grid gap-2">
-                        <div className="flex items-center gap-2 font-medium leading-none">
-                        Crime rate trends <TrendingUp className="h-4 w-4" />
-                        </div>
-                        <div className="flex items-center gap-2 leading-none text-muted-foreground">
-                        Showing crime rates over time
-                        </div>
-                    </div>
-                    </div>
-                </CardFooter>
-                </Card>
-
+        return ( 
+            <Card>
+            <CardHeader>
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                  <CardTitle>Crime Rates Overview</CardTitle>
+                  <CardDescription>Explore monthly crime data by agency.</CardDescription>
+                </div>
+                <Select onValueChange={selectCategory}>
+                  <SelectTrigger className="w-[200px]">
+                    <SelectValue placeholder="Select Agency" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.values(chartConfig).map(({ label }, idx) => (
+                      <SelectItem key={label + idx} value={label}>
+                        {label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </CardHeader>
+          
+            <CardContent>
+              <ChartContainer config={chartConfig}>
+                <LineChart
+                  accessibilityLayer
+                  data={cData}
+                  margin={{ left: 20, right: 20, top: 20, bottom: 20 }}
+                >
+                  <CartesianGrid vertical={false} />
+                  <XAxis
+                    dataKey="date"
+                    tickLine={false}
+                    axisLine={false}
+                    tickMargin={8}
+                  />
+                  <YAxis
+                    domain={[0, 'auto']}
+                    tickLine={false}
+                    axisLine={false}
+                    tickMargin={8}
+                  />
+                  <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+                  <Legend />
+                  {keysToDisplay.map((key) => (
+                    <Line
+                      key={key}
+                      dataKey={key}
+                      type="monotone"
+                      stroke={chartConfig[key].color}
+                      strokeWidth={2}
+                      activeDot={{ r: 8 }}
+                      connectNulls
+                      isAnimationActive={false}
+                      dot={false}
+                    />
+                  ))}
+                </LineChart>
+              </ChartContainer>
+            </CardContent>
+          
+            <CardFooter>
+              <div className="flex w-full items-start gap-3 text-sm">
+                <div className="grid gap-1">
+                  <div className="flex items-center gap-2 font-medium leading-none">
+                    Crime Rate Trends <TrendingUp className="h-4 w-4" />
+                  </div>
+                  <div className="text-muted-foreground">
+                    Visualizing crime rates over time for selected agencies.
+                  </div>
+                </div>
+              </div>
+            </CardFooter>
+          </Card>
+          
             )
         }
 

@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import   SchoolDetails from "@/results_components/SchoolDetails";
 import {
@@ -7,6 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
+import { ArrowLeft } from 'lucide-react';
 
 
 
@@ -20,6 +22,7 @@ import { Property } from "@/Model/RealEstateModel";
 import { useAuth } from "@/context/AuthContext";
 
 export function SearchResults({isSample}: { isSample: boolean }) {
+  const navigate = useNavigate()
   const{accessToken} = useAuth()
   const {location}                                                = useParams                      (  );
   const [schoolProperties         , setSchoolProperties         ] = useState<PropertyInformation[]>([]);
@@ -129,6 +132,21 @@ export function SearchResults({isSample}: { isSample: boolean }) {
   }
   return (
     <>
+    <div className="mx-auto space-y-6 relative bg-white">
+    {/* Left-aligned arrow button */}
+    <div className="flex justify-start p-4">
+      <button
+        onClick={() => navigate('/index')} // Replace with your actual route
+        className="flex items-center p-2 rounded hover:bg-gray-100 transition bg-slate-100"
+        aria-label="Back to search"
+
+      >
+        <ArrowLeft size={24} />
+      </button>
+    </div>
+
+    {/* ...rest of your content */}
+  </div>
       <div className="mx-auto space-y-6 relative bg-white">
       
         {/* Map Section */}
