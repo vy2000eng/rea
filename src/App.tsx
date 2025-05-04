@@ -2,14 +2,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 
 import './App.css'
-import { Index } from './pages/Index'
 import { SearchResults } from './pages/Results'
 import LandingPage from "./pages/LandingPage"
 import LoginForm from "./components/auth_form"
 import { AuthProvider } from './context/AuthContext';
 import RequireAuth from "./context/RequireAuth"
 import Sidebar from "./components/sidebar"
-import { AppSidebar } from "./components/app-sidebar"
 
 function App() {
 

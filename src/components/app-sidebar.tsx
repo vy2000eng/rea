@@ -1,8 +1,6 @@
 import * as React from "react"
-import { GalleryVerticalEnd, Minus, Plus } from "lucide-react"
 import { useEffect,useState} from "react"
 
-import { SearchForm } from "@/components/search-form"
 import {
   Collapsible,
   CollapsibleContent,
@@ -16,16 +14,12 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
-  SidebarRail,
+
   SidebarFooter
 } from "@/components/ui/sidebar"
 import { useAuth } from "@/context/AuthContext"
 import { UserSearchModel } from "@/Model/UserSearchModel"
 import { UserModel } from "@/Model/UserModel"
-import { Separator } from "@radix-ui/react-separator"
 
 
 // This is sample data.
