@@ -46,7 +46,7 @@ import { UserModel } from "@/Model/UserModel"
 // }
 
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar() {
   const {accessToken,logout} = useAuth();
   const [searchQueries, setSearchQueries ]= useState<UserSearchModel[]>()
   const [userData,setUserData] = useState<UserModel>();
