@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (response.ok) {
       localStorage.setItem('accessToken', data.accessToken);
       localStorage.setItem('refreshToken', data.refreshToken);
-      localStorage.setItem('user', JSON.stringify(data.user));
+     // localStorage.setItem('user', JSON.stringify(data.user));
       setAccessToken(data.accessToken);
       setRefreshToken(data.refreshToken);
       console.log(data.accessToken);
@@ -69,7 +69,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    localStorage.removeItem('user');
+    //localStorage.removeItem('user');
     setAccessToken(null);
     setRefreshToken(null);
    // setUser(null);

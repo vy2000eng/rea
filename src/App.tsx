@@ -20,8 +20,6 @@ function App() {
               <Route path="/search/:location" element={ <RequireAuth> <SearchResults isSample={false}/></RequireAuth>  } />
               <Route path="/login" element={<LoginForm />} /> 
               <Route path="/sampleSearchLocation" element={<SearchResults isSample={true} />} /> {/* <-- Add this */}
-
-
           </Routes>
       </BrowserRouter>
 
