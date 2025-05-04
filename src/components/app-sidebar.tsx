@@ -2,20 +2,7 @@ import * as React from "react"
 import { useEffect,useState} from "react"
 
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
-import {
   Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-
-  SidebarFooter
 } from "@/components/ui/sidebar"
 import { useAuth } from "@/context/AuthContext"
 import { UserSearchModel } from "@/Model/UserSearchModel"
