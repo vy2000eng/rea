@@ -7,6 +7,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   refreshAccessToken: () => Promise<void>;
+  isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -15,14 +16,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   //const [user, setUser] = useState(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true); // Add this line
+
 
   // Initialize from localStorage on app load
   useEffect(() => {
     const storedToken = localStorage.getItem('accessToken');
     const storedRefresh = localStorage.getItem('refreshToken');
-    const storedUser = localStorage.getItem('user');
+    //const storedUser = localStorage.getItem('user');
   
-    if (storedToken && storedUser) {
+    if (storedToken) {
       try {
         setAccessToken(storedToken);
         setRefreshToken(storedRefresh);
@@ -33,11 +36,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setAccessToken(null);
         setRefreshToken(null);
         // Optionally clear corrupted data
-        localStorage.removeItem('user');
+        //localStorage.removeItem('user');
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
       }
     }
+    setIsLoading(false);
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -101,7 +105,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   return (
     <AuthContext.Provider value={{ 
       //user,
-      accessToken, login, logout, refreshAccessToken }}>
+      accessToken, login, logout, isLoading, refreshAccessToken }}>
       {children}
     </AuthContext.Provider>
   );

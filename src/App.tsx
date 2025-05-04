@@ -8,6 +8,8 @@ import LandingPage from "./pages/LandingPage"
 import LoginForm from "./components/auth_form"
 import { AuthProvider } from './context/AuthContext';
 import RequireAuth from "./context/RequireAuth"
+import Sidebar from "./components/sidebar"
+import { AppSidebar } from "./components/app-sidebar"
 
 function App() {
 
@@ -16,7 +18,7 @@ function App() {
         <BrowserRouter>
           <Routes>
               <Route path="/" element={   <LandingPage />} />
-              <Route path="/index" element ={<RequireAuth><Index/></RequireAuth> }/>
+              <Route path="/index" element ={<RequireAuth>  <Sidebar/> </RequireAuth> }/>
               <Route path="/search/:location" element={ <RequireAuth> <SearchResults isSample={false}/></RequireAuth>  } />
               <Route path="/login" element={<LoginForm />} /> 
               <Route path="/sampleSearchLocation" element={<SearchResults isSample={true} />} /> {/* <-- Add this */}
