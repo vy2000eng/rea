@@ -10,7 +10,12 @@ import {
 
 import { ArrowLeft } from 'lucide-react';
 
+type EndPointToUse = {
+  isSample:boolean,
+  location: string | undefined,
+  id:string | undefined
 
+}
 
 
 import { parsePoliceDepartmentData, parseRealEstateData } from "@/lib/utils";
@@ -22,9 +27,17 @@ import { Property } from "@/Model/RealEstateModel";
 import { useAuth } from "@/context/AuthContext";
 
 export function SearchResults({isSample}: { isSample: boolean }) {
+ 
   const navigate = useNavigate()
   const{accessToken} = useAuth()
-  const {location}                                                = useParams                      (  );
+  const {location,id}                                                = useParams                      (  );
+  let endpointToUse: EndPointToUse = {
+    isSample: isSample,
+    location: location,
+    id      : id 
+  };
+
+
   const [schoolProperties         , setSchoolProperties         ] = useState<PropertyInformation[]>([]);
   const [hospitalProperties       , setHospitalProperties       ] = useState<PropertyInformation[]>([]);
   const [corporateOfficeProperties, setCorporateOfficeProperties] = useState<PropertyInformation[]>([]);
@@ -52,13 +65,23 @@ export function SearchResults({isSample}: { isSample: boolean }) {
     isFirstMount.current  = false;
 
     const fetchProperties = async () => {
-      if (!isSample && !location) return;
-      try {
-            setLoading                           (true                                                                          );
-           const endpoint = isSample
-           ?`${import.meta.env.VITE_TEST_LOCATIONENPOINT}`
-           :`${import.meta.env.VITE_GET_LOCATION_ENDPOINT}${encodeURIComponent(location!)}`
 
+
+      //if (!isSample && !location) return;
+     // if (!endpointToUse.isSample ) return;
+      if(!endpointToUse.id && !endpointToUse) return; 
+
+
+      try {
+            setLoading                           (true                         );
+            let endpoint = "";
+            if(endpointToUse.location != undefined){
+              endpoint = isSample
+              ?`${import.meta.env.VITE_TEST_LOCATIONENPOINT}`
+              :`${import.meta.env.VITE_GET_LOCATION_ENDPOINT}${encodeURIComponent(location!)}`
+            }else{
+              endpoint = `${import.meta.env.VITE_GET_USER_QUERY_BY_ID}${id}`
+            }
             const response = await fetch         (endpoint,{
               headers: {
                 'Authorization': `Bearer ${accessToken}`

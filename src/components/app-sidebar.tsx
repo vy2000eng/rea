@@ -4,50 +4,42 @@ import { useEffect,useState} from "react"
 import { useAuth } from "@/context/AuthContext"
 import { UserSearchModel } from "@/Model/UserSearchModel"
 import { UserModel } from "@/Model/UserModel"
+import { useNavigate } from "react-router-dom";
+import { Trash2 } from "lucide-react";
+
 
 
 // This is sample data.
 
 
-// const data = {
-//   navMain: [
-//     {
-//       title: "Profile",
-//       url: "#",
-//       items: [
-//         {
-//           title: "Installation",
-//           url: "#",
-//         },
-    
-//       ],
-//     },
-//     {
-//       title: "Searches",
-//       url: "#",
-//       items: [
-//         {
-//           title: "Routing",
-//           url: "#",
-//         },
-//         {
-//           title: "Data Fetching",
-//           url: "#",
-//           isActive: true,
-//         },
-
-//       ],
-//     },
-
-//   ],
-// }
 
 
 export function AppSidebar() {
   const {accessToken,logout} = useAuth();
   const [searchQueries, setSearchQueries ]= useState<UserSearchModel[]>()
   const [userData,setUserData] = useState<UserModel>();
+  const navigate = useNavigate()
 
+  function  retrievePreviousSearch(id:number){
+    navigate(`/userQueryById/${id}`)
+  }
+
+  async function deletedSearchById(id:number){
+    const response = await fetch (`${import.meta.env.VITE_DELETE_USER_QURY_BY_ID}${id}` ,
+      {
+        method:'DELETE',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      }
+    );
+    if (!response.ok) throw new Error    (`HTTP error! status: ${response.status}`);
+    setSearchQueries(prevItems => prevItems?.filter(item => item.placeId !== id));
+
+   // const data  = await response.json();
+
+
+  }
 
   useEffect(()=>{
 
@@ -148,12 +140,14 @@ export function AppSidebar() {
           <div>
             {searchQueries?.map((item, index) => {
               return (
-                <div 
-                  key={index}
-                  className="mb-2 w-full"
-                >
-                  <button 
-                    className="w-full rounded-md bg-white shadow-sm hover:bg-gray-100 p-2 sm:p-3 text-left"
+                <div
+                key={index}
+                className="mb-2 w-full"
+              >
+                <div className="flex w-full">
+                  <button
+                    className="flex-grow rounded-l-md bg-white shadow-sm hover:bg-gray-100 p-2 sm:p-3 text-left"
+                    onClick={() => retrievePreviousSearch(item.placeId)}
                   >
                     <div className="flex justify-between items-center w-full">
                       <span className="truncate text-sm font-medium">{item.originalQuery || "Search"}</span>
@@ -162,7 +156,18 @@ export function AppSidebar() {
                       </span>
                     </div>
                   </button>
+                  <button
+                    className="flex-shrink-0 rounded-r-md bg-red-50 hover:bg-red-100 p-2 text-red-600"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deletedSearchById(item.placeId);
+                    }}
+                    title="Delete search"
+                  >
+                    <Trash2 size={18} />
+                  </button>
                 </div>
+              </div>
               );
             })}
           </div>
