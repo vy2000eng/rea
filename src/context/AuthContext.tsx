@@ -5,15 +5,21 @@ interface AuthContextType {
  //user: any;
   accessToken: string | null;
   login: (email: string, password: string) => Promise<void>;
+  register: (email: string, password: string,username:string) => Promise<void>;
+
   logout: () => void;
   refreshAccessToken: () => Promise<void>;
   isLoading: boolean;
+  setAccessToken:(token:string)=>void;
+  setRefreshToken:(token:string)=>void;
+
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   //const [user, setUser] = useState(null);
+  //const {toast} = useToast
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true); // Add this line
@@ -65,6 +71,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       throw new Error(data.message);
     }
   };
+  const register = async (email:string, username:string, password:string) =>{
+   /// try{
+
+      const response = await fetch(`${import.meta.env.VITE_REGISTER_ENDPOINT}` , {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, username,password }),
+      });
+      if(response.ok){
+        await login(email, password);
+       // await login(email, password);
+      }
+
+  }
+
 
   const logout = () => {
     localStorage.removeItem('accessToken');
@@ -105,7 +126,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   return (
     <AuthContext.Provider value={{ 
       //user,
-      accessToken, login, logout, isLoading, refreshAccessToken }}>
+      accessToken, login,register, logout, isLoading, refreshAccessToken,setAccessToken,setRefreshToken }}>
       {children}
     </AuthContext.Provider>
   );

@@ -21,7 +21,7 @@ const LandingPage = () => {
                   <div className="flex flex-col items-center space-y-4 rounded-md">
                      
                     
-                      <AuthForm/>
+                      <AuthForm className='min-w-80'/>
                       <Button asChild className="w-auto px-6 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 rounded-md shadow-sm transition duration-150 ease-in-out mx-auto mt-4">
                       <Link to={"/sampleSearchLocation"} className="flex items-center justify-center">
                           View Sample Research Results

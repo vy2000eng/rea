@@ -8,6 +8,10 @@ import LoginForm from "./components/auth_form"
 import { AuthProvider } from './context/AuthContext';
 import RequireAuth from "./context/RequireAuth"
 import Sidebar from "./components/sidebar"
+import EmailConfirmation from "./pages/ConfirmEmail"
+import { Toaster } from "./components/ui/toaster"
+import PasswordReset from "./pages/ResetPassword"
+import { SendPasswordReset } from "./pages/SendPasswordReset"
 
 function App() {
 
@@ -21,9 +25,15 @@ function App() {
               <Route path="/login" element={<LoginForm />} /> 
               <Route path="/sampleSearchLocation" element={<SearchResults isSample={true} />} /> {/* <-- Add this */}
               <Route path="/userQueryById/:id" element={ <RequireAuth> <SearchResults isSample={false} />  </RequireAuth>} />
-              
+              <Route path="/confirmEmail/:userId/:code" element={  <EmailConfirmation/>  } />
+              <Route path="/resetPassword/:email/:code" element={  <PasswordReset/>  } />
+              <Route path="/sendPasswordReset" element={  <SendPasswordReset/>  } />
+
+
+
           </Routes>
       </BrowserRouter>
+      <Toaster/>
 
     </AuthProvider>
    
@@ -32,3 +42,7 @@ function App() {
 }
 
 export default App
+
+
+
+

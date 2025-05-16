@@ -16,7 +16,7 @@ export function Index() {
 
     return (
         // Add padding-top to push the form lower on the page
-        <div className="flex flex-col items-center justify-center w-full pt-64">
+        <div className="flex flex-col   w-full pt-64">
           <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto">
             <div className="flex flex-col items-center gap-2">
               <div className="text-white font-medium text-sm mb-1 self-start">

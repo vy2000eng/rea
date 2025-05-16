@@ -10,62 +10,64 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import {  useNavigate } from "react-router-dom"
 import { useAuth } from "@/context/AuthContext"
+import { useToast } from "@/hooks/use-toast"
 
 
 export function AuthForm({ className, ...props}: React.ComponentPropsWithoutRef<"div">) {
-  const { login } = useAuth();
+  const { login,register } = useAuth();
   const [username, setUsername] = useState('');
   const navigate = useNavigate()
-
-
+  const {toast} = useToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showLogin, setShowLogin] = useState(true);
-
-
   const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if(showLogin){
-      console.log("logging in...")
-
       try {
         console.log(email)
         console.log(password)
          await login(email, password);
          navigate(`/index`)
-
-
       } catch (error) {
-        // Show error message
+        toast({
+          title: "an unexpected error occured, please try again later!",
+        })
       }
+    }else{
+      try{
+        await register(email, username,password)
 
-
+      }catch(e){
+        toast({
+          title: "an unexpected error occured, please try again later!",
+        })
+      }
+   
     }
   
   };
+  async function loginWithGoogle(){
+    window.location.href = "https://localhost:7234/api/Account/GoogleLogin?returnUrl=http://localhost:5173/index"
+  }
 
-    function changeState(){
-        setShowLogin(!showLogin);
-        console.log(showLogin)
-    }
-
-  
-
-
-
+  function changeState(){
+      setShowLogin(!showLogin);
+      console.log(showLogin)
+  }
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
+      <Card >
         <CardHeader>
           {showLogin ?
           <div>
              <CardTitle className="text-2xl">Login</CardTitle>
             <CardDescription>
-              Enter your email below to login to your account
+              Login to Your Account
             </CardDescription>
             
             
@@ -74,7 +76,7 @@ export function AuthForm({ className, ...props}: React.ComponentPropsWithoutRef<
           <div>
              <CardTitle className="text-2xl">Register</CardTitle>
               <CardDescription>
-                Enter your email, username, and password below to login to your account
+                Register An Account
               </CardDescription>
            
 
@@ -86,21 +88,26 @@ export function AuthForm({ className, ...props}: React.ComponentPropsWithoutRef<
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                {!showLogin && <div>
-                  <Label htmlFor="email">username</Label>
-                    <Input
-                      id="username"
-                      type="username"
-                      placeholder="a unique username"
-                      required
-                      value={username}
-                      onChange={e => setUsername(e.target.value)}
-                    />
-                  
-                  
-                  
-                  </div>}
-                <Label htmlFor="email">Email</Label>
+                {!showLogin && 
+                  <div >
+                    <div className="flex flex-row py-2">
+                      <Label htmlFor="email">Username</Label>
+
+                    </div>
+                      <Input
+                        id="username"
+                        type="username"
+                        placeholder="a unique username"
+                        required
+                        value={username}
+                        onChange={e => setUsername(e.target.value)}
+                      />
+                  </div>
+                }
+                <div className="flex flex-row py-2">
+                  <Label htmlFor="email">Email</Label>
+
+                </div>
                 <Input
                   id="email"
                   type="email"
@@ -108,15 +115,13 @@ export function AuthForm({ className, ...props}: React.ComponentPropsWithoutRef<
                   required
                   value={email}
                   onChange={e => setEmail(e.target.value)}
-                  
-
                 />
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
                   <a
-                    href="#"
+                    href="sendPasswordReset"
                     className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                   >
                     Forgot your password?
@@ -130,10 +135,17 @@ export function AuthForm({ className, ...props}: React.ComponentPropsWithoutRef<
                 
                 />
               </div>
-              <Button type="submit" className="w-full">
+              {showLogin?
+               <Button type="submit" className="w-full">
                 Login
               </Button>
-              <Button variant="outline" className="w-full">
+                :
+                <Button type="submit" className="w-full">
+                Register
+              </Button>
+              }
+              
+              <Button variant="outline" className="w-full" onClick={loginWithGoogle}>
                 Login with Google
               </Button>
             </div>
@@ -152,12 +164,8 @@ export function AuthForm({ className, ...props}: React.ComponentPropsWithoutRef<
                 login
               </Button>
 
-               </div>
-              
-            
+               </div>  
             }
-              
-             
             </div>
           </form>
         </CardContent>
