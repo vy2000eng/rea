@@ -2,7 +2,7 @@ import {
 	APIProvider,
 	Map
 } from "@vis.gl/react-google-maps";
-import { ControlPanel } from "./controlPanel";
+import { ControlPanel } from "../components/ui/controlPanel";
 import { useState,useMemo } from "react";
 import { PropertyInformation } from "@/Model/SchoolModel";
 import { Review              } from "@/Model/SchoolModel";

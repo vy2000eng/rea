@@ -20,17 +20,17 @@ type EndPointToUse = {
 
 import { parsePoliceDepartmentData, parseRealEstateData } from "@/lib/utils";
 
-import { GoogleMap } from "@/components/ui/GoogleMaps";
+import { GoogleMap } from "@/results_components/GoogleMaps";
 import {PropertyInformation } from "@/Model/SchoolModel";
 import { CrimeData} from "@/Model/CrimeModel";
 import { Property } from "@/Model/RealEstateModel";
 import { useAuth } from "@/context/AuthContext";
 
-export function SearchResults({isSample}: { isSample: boolean }) {
+export function SearchResults({isSample, location, id}: { isSample: boolean, location:string|undefined, id:string|undefined }) {
  
   const navigate = useNavigate()
   const{accessToken} = useAuth()
-  const {location,id}                                                = useParams                      (  );
+  //const {location,id}                                                = useParams                      (  );
   let endpointToUse: EndPointToUse = {
     isSample: isSample,
     location: location,

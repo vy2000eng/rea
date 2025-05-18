@@ -5,7 +5,7 @@ import {
 	InfoWindow,
 	useMap,
 } from "@vis.gl/react-google-maps";
-import { Poi } from "@/components/ui/GoogleMaps";
+import { Poi } from "@/results_components/GoogleMaps";
 import { type Marker, MarkerClusterer } from "@googlemaps/markerclusterer";
 
 

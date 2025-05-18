@@ -42,8 +42,9 @@ export function AuthForm({ className, ...props}: React.ComponentPropsWithoutRef<
         await register(email, username,password)
 
       }catch(e){
+        
         toast({
-          title: "an unexpected error occured, please try again later!",
+          title: "please try a different email, username, or password",
         })
       }
    

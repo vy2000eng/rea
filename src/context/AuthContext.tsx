@@ -83,6 +83,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         await login(email, password);
        // await login(email, password);
       }
+      throw ("please try a different email, or address")
 
   }
 

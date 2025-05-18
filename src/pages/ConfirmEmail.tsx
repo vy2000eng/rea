@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { EmailConfirmationProps } from '@/Model/ConfirmEmail';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 
@@ -50,21 +49,31 @@ const EmailConfirmation= ({
 
 
   return (
-    <div className={`email-confirmation-container`}>
+    <>
+    {isSubmitting? 
+    
+    <div className="flex items-center justify-center h-96">
+        <div className="text-lg">Loading schools...</div>
+    </div>
+    
+    :
+    
+        <div className={`email-confirmation-container`}>
 
         {message.text && (
-          <div 
-            className={`p-3 rounded ${
-              message.type === 'success' ? 'bg-green-100 text-green-800' : 
-              message.type === 'error' ? 'bg-red-100 text-red-800' : 
-              'bg-blue-100 text-blue-800'
-            }`}
-          >
-            {message.text}
-          </div>
+            <div 
+                className={`p-3 rounded ${
+                message.type === 'success' ? 'bg-green-100 text-green-800' : 
+                message.type === 'error' ? 'bg-red-100 text-red-800' : 
+                'bg-blue-100 text-blue-800'
+                }`}>
+                {message.text}
+            </div>
         )}
-        
-    </div>
+        </div>
+    }
+    </>
+
   );
 };
 

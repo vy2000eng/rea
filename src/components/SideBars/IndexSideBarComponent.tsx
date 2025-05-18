@@ -174,8 +174,8 @@ export function AppSidebar() {
     <SidebarContent className="px-2 py-2">
       <SidebarGroup>
         <SidebarMenu>
-             {/* Profile Collapsible */}
-             <Collapsible className="group/collapsible">
+            {/* Profile Collapsible */}
+            <Collapsible className="group/collapsible">
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
                 <SidebarMenuButton className="hover:bg-slate-100 transition-colors bg-white">

@@ -1,4 +1,4 @@
-import { AppSidebar } from "@/components/app-sidebar"
+import { AppSidebar } from "@/components/SideBars/IndexSideBarComponent"
 
 import {
   SidebarInset,
@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/sidebar"
 import { Index } from "@/pages/Index"
 
-export default function Page() {
+export default function IndexSideBar() {
   return (
     <SidebarProvider>
 
@@ -17,6 +17,7 @@ export default function Page() {
       <SidebarInset>
       
           <Index />
+          
       </SidebarInset>
     </SidebarProvider>
   )
