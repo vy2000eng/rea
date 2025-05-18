@@ -2,8 +2,8 @@ import {
 	APIProvider,
 	Map
 } from "@vis.gl/react-google-maps";
-import { ControlPanel } from "../components/ui/controlPanel";
-import { useState,useMemo } from "react";
+import { ControlPanel        } from "../components/ui/controlPanel";
+import { useState,useMemo, useEffect    } from "react";
 import { PropertyInformation } from "@/Model/SchoolModel";
 import { Review              } from "@/Model/SchoolModel";
 import { PoiMarkers          } from "@/results_components/MapMarkers";
@@ -32,8 +32,9 @@ export function GoogleMap(
         gymStoreProperties       ,
         restarauntProperties     ,
         policeDepartments        ,
-        forSaleProperties,
-        forRentProperties,
+        forSaleProperties        ,
+        forRentProperties        ,
+        activeTitle
 
     }: 
     {
@@ -48,13 +49,14 @@ export function GoogleMap(
      gymStoreProperties       : PropertyInformation[],
      restarauntProperties     : PropertyInformation[],
      policeDepartments        : PropertyInformation[],
-     forSaleProperties        :PropertyInformation[],
-     forRentProperties        :PropertyInformation[]
+     forSaleProperties        : PropertyInformation[],
+     forRentProperties        : PropertyInformation[],
+     activeTitle:string
 
 
     }) 
     {
-        console.log(policeDepartments)
+      //  console.log(policeDepartments)
     
 
         const getAverageRating = (reviews: Review[]) => {
@@ -79,11 +81,20 @@ export function GoogleMap(
                                 .concat(forRentProperties)
                                 .filter(property => property !== null && property !== undefined);;
         const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+       console.log("The current Active Title is:" + activeTitle)
+    //    useEffect(()=>{
+        
+    //             setSelectedCategory(activeTitle)
+
+    //    },[activeTitle])
 
         const categories = useMemo(() => getCategories(allProperties), [allProperties]);
         
+        
 
         const filteredProperties = useMemo(() => {
+            //setSelectedCategory(activeTitle)
+            console.log(selectedCategory)
           if (!allProperties) return null;
       
           return allProperties.filter(
@@ -114,7 +125,7 @@ export function GoogleMap(
 
 
         return (
-            <div className="w-full h-[75vh]  mx-auto">
+            <div className="w-full h-full">
                 <APIProvider
                     apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
                     onLoad={() => console.log("Maps API has loaded.")}
@@ -122,6 +133,7 @@ export function GoogleMap(
                  
                     <Map
                         style={{ width: "100%", height: "100%" }}
+
                         defaultCenter={{
                             lat: schoolProperties[0].location.latitude,
                             lng: schoolProperties[0].location.longitude,
@@ -135,8 +147,9 @@ export function GoogleMap(
                     </Map>
 
                     <ControlPanel 
-                        categories      = {categories}
-                        onCategoryChange= {setSelectedCategory}
+                        categories       = {categories}
+                        onCategoryChange = {setSelectedCategory}
+                        activeTitle      = {activeTitle}
                     
                     />
                  

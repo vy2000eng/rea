@@ -146,14 +146,14 @@ const PropertyCard = ({ property }: { property: Property }) => {
     const [page, setPage] = useState(2);
     const [isLoading, setIsLoading] = useState(false);
     const { location } = useParams();
-    const{accessToken} = useAuth()
+    const{accessToken,authFetch} = useAuth()
   
     const loadMoreProperties = async (catergoryIndex:number) => {
       if (isLoading || !location) return;
       
       setIsLoading(true);
       try {
-        const response = await fetch(`${import.meta.env.VITE_GET_MORE_REAL_ESTATE_DATA}${import.meta.env.VITE_GET_MORE_REAL_ESTATE_DATA_PARAM_1}=${encodeURIComponent(location)}&${import.meta.env.VITE_GET_MORE_REAL_ESTATE_DATA_PARAM_2}=${catergoryIndex}&${import.meta.env.VITE_GET_MORE_REAL_ESTATE_DATA_PARAM_3}=${page}`,{
+        const response = await authFetch(`${import.meta.env.VITE_GET_MORE_REAL_ESTATE_DATA}${import.meta.env.VITE_GET_MORE_REAL_ESTATE_DATA_PARAM_1}=${encodeURIComponent(location)}&${import.meta.env.VITE_GET_MORE_REAL_ESTATE_DATA_PARAM_2}=${catergoryIndex}&${import.meta.env.VITE_GET_MORE_REAL_ESTATE_DATA_PARAM_3}=${page}`,{
             headers: {
                 'Authorization': `Bearer ${accessToken}`
               }

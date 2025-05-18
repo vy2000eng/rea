@@ -12,6 +12,7 @@ interface AuthContextType {
   isLoading: boolean;
   setAccessToken:(token:string)=>void;
   setRefreshToken:(token:string)=>void;
+  authFetch: (url: string, options?: RequestInit) => Promise<Response>;
 
 }
 
@@ -31,7 +32,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const storedRefresh = localStorage.getItem('refreshToken');
     //const storedUser = localStorage.getItem('user');
   
-    if (storedToken) {
+    if (storedToken && storedRefresh) {
       try {
         setAccessToken(storedToken);
         setRefreshToken(storedRefresh);
@@ -123,11 +124,57 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       logout();
     }
   };
+  const authFetch = async (url: string, options: RequestInit = {}) => {
+    // Get current token
+    const token = localStorage.getItem('accessToken');
+    
+    // Set up headers with token
+    const fetchOptions = {
+      ...options,
+      headers: {
+        ...options.headers,
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+      }
+    };
+    
+    // Make request
+    let response = await fetch(url, fetchOptions);
+    
+    // Handle 401 Unauthorized - Token expired
+    if (response.status === 401) {
+      try {
+        // Try to refresh the token
+        await refreshAccessToken();
+        
+        // Retry with new token
+        const newToken = localStorage.getItem('accessToken');
+        response = await fetch(url, {
+          ...options,
+          headers: {
+            ...options.headers,
+            'Authorization': `Bearer ${newToken}`
+          }
+        });
+        
+        // If still unauthorized after refresh, redirect to login
+        if (response.status === 401) {
+          window.location.href = '/login';
+          throw new Error('Still unauthorized after token refresh');
+        }
+      } catch (error) {
+        // If refresh fails, redirect to login
+        window.location.href = '/login';
+        throw error;
+      }
+    }
+    
+    return response;
+  };
 
   return (
     <AuthContext.Provider value={{ 
       //user,
-      accessToken, login,register, logout, isLoading, refreshAccessToken,setAccessToken,setRefreshToken }}>
+      accessToken, login,register, logout, isLoading, refreshAccessToken,setAccessToken,setRefreshToken,authFetch }}>
       {children}
     </AuthContext.Provider>
   );

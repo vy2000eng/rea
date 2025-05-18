@@ -5,11 +5,15 @@ import { Navigate, useLocation } from 'react-router-dom';
 function RequireAuth({ children }: PropsWithChildren<{}>) {
   //const { user } = useAuth();
   const {accessToken,isLoading,setAccessToken, setRefreshToken} = useAuth();
+  const params = new URLSearchParams(window.location.search);
+  const encodedAccessToken = params.get('access_token');
+  const encodedRefreshToken = params.get('refresh_token');
+
 
   const isGoogleLogin = () => {
-    const params = new URLSearchParams(window.location.search);
-    const encodedAccessToken = params.get('access_token');
-    const encodedRefreshToken = params.get('refresh_token');
+
+    // const encodedAccessToken = params.get('access_token');
+    // const encodedRefreshToken = params.get('refresh_token');
     
     if (encodedAccessToken && encodedRefreshToken) {
       // Store both tokens
@@ -33,7 +37,11 @@ function RequireAuth({ children }: PropsWithChildren<{}>) {
 
     }
   }
-  isGoogleLogin()
+  if(encodedAccessToken && encodedRefreshToken){
+    isGoogleLogin()
+
+
+  }
 
 
 
@@ -48,6 +56,7 @@ function RequireAuth({ children }: PropsWithChildren<{}>) {
   if (!accessToken) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
+  
 
   return children;
 }

@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useMemo } from "react";
 
 import { ArrowLeft } from 'lucide-react';
 
@@ -26,10 +27,11 @@ import { CrimeData} from "@/Model/CrimeModel";
 import { Property } from "@/Model/RealEstateModel";
 import { useAuth } from "@/context/AuthContext";
 
-export function SearchResults({isSample, location, id}: { isSample: boolean, location:string|undefined, id:string|undefined }) {
- 
+export function SearchResults({isSample, location, id,activeTitle}: { isSample: boolean, location:string|undefined, id:string|undefined, activeTitle:string}) {
+ // console.log("SearchResult "+ activeTitle)  
+
   const navigate = useNavigate()
-  const{accessToken} = useAuth()
+  const{accessToken,authFetch} = useAuth()
   //const {location,id}                                                = useParams                      (  );
   let endpointToUse: EndPointToUse = {
     isSample: isSample,
@@ -48,21 +50,19 @@ export function SearchResults({isSample, location, id}: { isSample: boolean, loc
   const [groceryStoreProperties   , setGroceryStoreProperties   ] = useState<PropertyInformation[]>([]);
   const [gymStoreProperties       , setGymProperties            ] = useState<PropertyInformation[]>([]);
   const [restarauntProperties     , setRestarauntProperties     ] = useState<PropertyInformation[]>([]);
-  const [activeProperties         , setActiveProperties         ] = useState<PropertyInformation[] | CrimeData[]|Property[][]>([]);
-  const [activeTitle              , setActiveTitle              ] = useState<string>("School Details" );
+  //const [activeProperties         , setActiveProperties         ] = useState<PropertyInformation[] | CrimeData[]|Property[][]>([]);
+ // const [activeTitle              , setActiveTitle              ] = useState<string>("School Details" );
   const [loading                  , setLoading                  ] = useState(true                     );
   const [crimeData                , setCrimeData                ] = useState<CrimeData[]>([])
   const [forSaleListings          , setForSaleListings          ] = useState<Property[]> ();
   const [forRentListings          , setForRentLstings           ] = useState<Property[]> ();
 
-  const isFirstMount                                              = useRef  (true                     ); 
+  //const isFirstMount                                              = useRef  (true                     ); 
 
 
   useEffect(() => {
-    if (!isFirstMount.current) {
-      return;
-    }
-    isFirstMount.current  = false;
+ 
+    //isFirstMount.current  = false;
 
     const fetchProperties = async () => {
 
@@ -82,7 +82,7 @@ export function SearchResults({isSample, location, id}: { isSample: boolean, loc
             }else{
               endpoint = `${import.meta.env.VITE_GET_USER_QUERY_BY_ID}${id}`
             }
-            const response = await fetch         (endpoint,{
+            const response = await authFetch         (endpoint,{
               headers: {
                 'Authorization': `Bearer ${accessToken}`
               }
@@ -101,10 +101,10 @@ export function SearchResults({isSample, location, id}: { isSample: boolean, loc
             setGymProperties                     (data["gymInformation"]                                                        );
             setRestarauntProperties              (data["restaurantInformation"]                                                 );
             setCrimeData                         (data["crimeInformation"]);
-            setActiveProperties                  (data["schoolInformation"] )
+           // setActiveProperties                  (data["schoolInformation"] )
             setForSaleListings                   (data["forSaleListings"].props);
             setForRentLstings                    (data["rentalListings"].props);
-            setActiveTitle                       ("Universities")
+            //setActiveTitle                       ("Universities")
             setLoading                           (false);
 
       } catch (error) {
@@ -114,6 +114,9 @@ export function SearchResults({isSample, location, id}: { isSample: boolean, loc
     };
 
     fetchProperties();
+    
+    //sendDataToParent(propertyCards)
+
   }, [location]);
 
   let policeDepartmentProperties:PropertyInformation[] = parsePoliceDepartmentData(crimeData)
@@ -128,71 +131,97 @@ export function SearchResults({isSample, location, id}: { isSample: boolean, loc
     allRealEstateData.push(forRentListings)
   }
 
-  console.log(allRealEstateData)
+ // console.log(allRealEstateData)
 
   const propertyCards = [
-    {title: "Universities      ", count: schoolProperties         .length, type: "schools"        ,data: schoolProperties          },
-    {title: "Hospitals"         , count: hospitalProperties       .length, type: "hospitals"      ,data: hospitalProperties        },
-    {title: "Corporate Offices" , count: corporateOfficeProperties.length, type: "offices"        ,data: corporateOfficeProperties },
-    {title: "Banks"             , count: bankProperties           .length, type: "banks"          ,data: bankProperties            },
-    {title: "Parks"             , count: parkProperties           .length, type: "parks"          ,data: parkProperties            },
-    {title: "Post Offices"      , count: postOfficeProperties     .length, type: "post offices"   ,data: postOfficeProperties      },
-    {title: "Churches"          , count: churchesProperties       .length, type: "churches"       ,data: churchesProperties        },
-    {title: "GroceryStore"      , count: groceryStoreProperties   .length, type: "groceries"      ,data: groceryStoreProperties    },
-    {title: "Gyms"              , count: gymStoreProperties       .length, type: "gyms"           ,data: gymStoreProperties        },
-    {title: "Restaurants"       , count: restarauntProperties     .length, type: "restaurants"    ,data: restarauntProperties      },
-    {title: "Crime"             , count: crimeData                .length, type: "Crime Agencies" ,data: crimeData                 },
-    {title: "Real Estate"       , count: 0                               , type: "realEstate"     ,data: allRealEstateData         }
+    {title: "University", count: schoolProperties         .length, type: "schools"        ,data: schoolProperties          },
+    {title: "Hospital"         , count: hospitalProperties       .length, type: "hospitals"      ,data: hospitalProperties         },
+    {title: "Corporate Offices" , count: corporateOfficeProperties.length, type: "offices"        ,data: corporateOfficeProperties  },
+    {title: "Bank"             , count: bankProperties           .length, type: "banks"          ,data: bankProperties             },
+    {title: "Parks"             , count: parkProperties           .length, type: "parks"          ,data: parkProperties             },
+    {title: "Post Offices"      , count: postOfficeProperties     .length, type: "post offices"   ,data: postOfficeProperties       },
+    {title: "Churches"          , count: churchesProperties       .length, type: "churches"       ,data: churchesProperties         },
+    {title: "GroceryStore"      , count: groceryStoreProperties   .length, type: "groceries"      ,data: groceryStoreProperties     },
+    {title: "Gyms"              , count: gymStoreProperties       .length, type: "gyms"           ,data: gymStoreProperties         },
+    {title: "Restaurants"       , count: restarauntProperties     .length, type: "restaurants"    ,data: restarauntProperties       },
+    {title: "Crime"             , count: crimeData                .length, type: "Crime Agencies" ,data: crimeData                  },
+    {title: "Real Estate"       , count: 0                               , type: "realEstate"     ,data: allRealEstateData          }
 
 
   ];
+
+  // useEffect(()=>{
+  //   propertyCards.forEach(x =>{
+  //     if(x.title === activeTitle){
+  //       setActiveProperties(x.data);
+        
+  //     }
+
+  //   })
+  //  // sendDataToParent(propertyCards)
+  // },[activeTitle])
+  const activeProperties = useMemo(() => {
+    const matchingCard = propertyCards.find(x => x.title === activeTitle);
+    return matchingCard ? matchingCard.data : schoolProperties;
+  }, [ activeTitle]);
+
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-96">
+      <div className="flex items-center justify-content h-96">
         <div className="text-lg">Loading schools...</div>
       </div>
     );
   }
   return (
     <>
-    <div className="mx-auto space-y-6 relative bg-white">
+    <div className=" relative bg-white">
     {/* Left-aligned arrow button */}
-    <div className="flex justify-start p-4">
-      <button
-        onClick={() => navigate('/index')} // Replace with your actual route
-        className="flex items-center p-2 rounded hover:bg-gray-100 transition bg-slate-100"
-        aria-label="Back to search"
+      <div className="flex justify-start p-4">
+        <button
+          onClick={() => navigate('/index')} // Replace with your actual route
+          className="flex items-center p-2 rounded hover:bg-gray-100 transition bg-slate-100"
+          aria-label="Back to search"
 
-      >
-        <ArrowLeft size={24} />
-      </button>
-    </div>
+        >
+          <ArrowLeft size={24} />
+        </button>
+      </div>
 
     {/* ...rest of your content */}
   </div>
-      <div className="mx-auto space-y-6 relative bg-white">
-      
-        {/* Map Section */}
-        <div className="w-full h-full rounded-sm  border ">
-          <GoogleMap 
-            schoolProperties          = {schoolProperties          }
-            hospitalProperties        = {hospitalProperties        }
-            corporateOfficeProperties = {corporateOfficeProperties }
-            bankProperties            = {bankProperties            }
-            parkProperties            = {parkProperties            }
-            postOfficeProperties      = {postOfficeProperties      }
-            churchesProperties        = {churchesProperties        }
-            groceryStoreProperties    = {groceryStoreProperties    }
-            gymStoreProperties        = {gymStoreProperties        }
-            restarauntProperties      = {restarauntProperties      }
-            policeDepartments         = {policeDepartmentProperties}
-            forSaleProperties         = {forSaleProperties         }
-            forRentProperties         = {forRentProperties         }
-          />
-        </div>
-        <SchoolDetails properties={activeProperties} title= {activeTitle} />
+  {/* Map Section - takes full height minus any other elements */}
+  <div className="flex flex-col h-full">
+  {/* Map container */}
+  <div className="h-3/5 w-full">
+    <GoogleMap 
+      schoolProperties={schoolProperties}
+      hospitalProperties={hospitalProperties}
+      corporateOfficeProperties={corporateOfficeProperties}
+      bankProperties={bankProperties}
+      parkProperties={parkProperties}
+      postOfficeProperties={postOfficeProperties}
+      churchesProperties={churchesProperties}
+      groceryStoreProperties={groceryStoreProperties}
+      gymStoreProperties={gymStoreProperties}
+      restarauntProperties={restarauntProperties}
+      policeDepartments={policeDepartmentProperties}
+      forSaleProperties={forSaleProperties}
+      forRentProperties={forRentProperties}
+      activeTitle={activeTitle}
+    />
+  </div>
+  
+  {/* Fixed width container for SchoolDetails */}
+  <div className="h-2/5 overflow-auto">
+    <div className="w-full min-w-[600px] mx-auto">
+      <SchoolDetails key={activeTitle} properties={activeProperties} title={activeTitle} />
+    </div>
+  </div>
+</div>
+  {/* Uncomment if needed */}
 
-      <div className="grid md:grid-cols-5 gap-6">
+
+      {/* <div className="grid md:grid-cols-5 gap-6">
             {propertyCards.map(card => {
               return (
                 <Card
@@ -229,8 +258,7 @@ export function SearchResults({isSample, location, id}: { isSample: boolean, loc
               </Card>
               );
             })}
-      </div>
-    </div>
+      </div> */}
     </>
   );
 }

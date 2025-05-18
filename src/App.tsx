@@ -22,7 +22,7 @@ function App() {
           <Routes>
               <Route path="/" element={   <LandingPage />} />
               <Route path="/index" element ={<RequireAuth>  <IndexSideBar/> </RequireAuth> }/>
-              {/* <Route path="/search/:location" element={ <RequireAuth> <SearchResults isSample={false}/></RequireAuth>  } /> */}
+              <Route path="/search/:location" element={ <RequireAuth> <SearchResultsSideBar isSample={false}/></RequireAuth>  } />
               <Route path="/userQueryById/:id" element={ <RequireAuth>  <SearchResultsSideBar isSample = {false}/>  </RequireAuth>} />
 
               <Route path="/login" element={<LoginForm />} /> 

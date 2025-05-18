@@ -5,7 +5,7 @@ import { useAuth } from "@/context/AuthContext"
 import { UserSearchModel } from "@/Model/UserSearchModel"
 import { UserModel } from "@/Model/UserModel"
 import { useNavigate } from "react-router-dom";
-import { Trash2,CircleDollarSign,LogOut,UserCheck,UserX,Search,ChevronRight,User, } from "lucide-react";
+import { Trash2,CircleDollarSign,LogOut,UserCheck,UserX,Search,ChevronRight,User,LayoutList } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -26,14 +26,19 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 import { useToast } from "@/hooks/use-toast";
+//import { PropertyCards } from "@/Model/PropCardsInterface";
 
 
-export function AppSidebar() {
-  const {accessToken,logout} = useAuth();
+export function AppSidebar({isSearchResults,sendActiveTitleToParent }:{isSearchResults:boolean,sendActiveTitleToParent?:(activeTitle:string)=>void}) {
+  const {accessToken,logout,authFetch} = useAuth();
   const [searchQueries, setSearchQueries ]= useState<UserSearchModel[]>()
   const [userData,setUserData] = useState<UserModel>();
   const navigate = useNavigate()
   const { toast } = useToast()
+
+  // if(childDataFromResults.length == 0){
+  //   console.log("data isempty")
+  // }
 
 
   function  retrievePreviousSearch(id:number){
@@ -42,7 +47,7 @@ export function AppSidebar() {
 
   async function deletedSearchById(id:number){
     try{
-      const response = await fetch (`${import.meta.env.VITE_DELETE_USER_QURY_BY_ID}${id}` ,
+      const response = await authFetch (`${import.meta.env.VITE_DELETE_USER_QURY_BY_ID}${id}` ,
         {
           method:'DELETE',
           headers: {
@@ -66,7 +71,7 @@ export function AppSidebar() {
   async function ResendConfirmationEmail(){
     const email = userData?.email;
     try{
-      const response = await fetch (`${import.meta.env.VITE_RESEND_CONFIRMATION_EMAIL}` ,
+      const response = await authFetch(`${import.meta.env.VITE_RESEND_CONFIRMATION_EMAIL}` ,
         {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
@@ -90,11 +95,16 @@ export function AppSidebar() {
     }
   }
 
+  async function DeleteUserAccount(){
+    
+
+  }
+
   useEffect(()=>{
 
     const fetchUserQueries = async () =>{
       try{
-        const response = await fetch (`${import.meta.env.VITE_GET_USER_QUERIES_ENDPOINT}` ,
+        const response = await authFetch (`${import.meta.env.VITE_GET_USER_QUERIES_ENDPOINT}` ,
           {
             headers: {
               'Authorization': `Bearer ${accessToken}`
@@ -113,7 +123,7 @@ export function AppSidebar() {
     }
     const fetchUserInfo = async () =>{
       try{
-        const response = await fetch (`${import.meta.env.VITE_GET_USER_INFO}` ,
+        const response = await authFetch (`${import.meta.env.VITE_GET_USER_INFO}` ,
           {
             headers: {
               'Authorization': `Bearer ${accessToken}`
@@ -152,6 +162,22 @@ export function AppSidebar() {
       action: () => console.log("Delete account")
     },
   ]
+  const propertyCards = [
+      {title: "university"},
+      {title: "hospital"         },
+      {title: "corporate_office" },
+      {title: "bank"             },
+      {title: "park"             },
+      {title: "post_office"      },
+      {title: "church"          },
+      {title: "grocery_store"      },
+      {title: "gym"              },
+      {title: "restaurant"       },
+      {title: "Crime"             },
+      {title: "Real Estate"       }
+  
+  
+    ];
 
   return (
     
@@ -218,6 +244,7 @@ export function AppSidebar() {
                           <SidebarMenuSubButton 
                             className="flex-grow hover:bg-transparent min-h-[35px]"
                             onClick={item.action}
+                            key = {index}
                           >
                             <div className="flex flex-col items-start w-full">
                               <span className="text-sm font-medium text-slate-700 truncate max-w-full">
@@ -304,7 +331,57 @@ export function AppSidebar() {
                 </SidebarMenuSub>
               </CollapsibleContent>
             </SidebarMenuItem>
-          </Collapsible>
+          </Collapsible>  
+          {/*   sidebar render for searchResults  */}
+          {isSearchResults && 
+          <>
+            <Collapsible defaultOpen className="group/collapsible">
+              <SidebarMenuItem>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton className="hover:bg-slate-100 transition-colors bg-white">
+                    <LayoutList className="mr-2 h-4 w-4 text-slate-600" />
+                    <span className="font-medium text-slate-700">Results</span>
+                    <ChevronRight className="ml-auto h-4 w-4 text-slate-400 transition-transform group-data-[state=open]/collapsible:rotate-90" />
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
+                <CollapsibleContent className="py-1">
+                  <SidebarMenuSub>
+                    {propertyCards.map((item) => (
+                      <SidebarMenuSubItem key={item.title}
+                      onClick={(e)=>{
+                        e.stopPropagation()
+                        if(sendActiveTitleToParent)
+                          sendActiveTitleToParent(item.title)}}
+                      >
+                        <div className="flex items-center justify-between w-full hover:bg-slate-100 rounded-sm py-2">
+                          {/* <SidebarMenuSubButton 
+                            className="flex-grow hover:bg-transparent min-h-[30px] bg-slate-200"
+                            //onClick={() => retrievePreviousSearch(item.placeId)}
+                          > */}
+                            {/* <div className="flex flex-col items-start w-full">
+                              <span className="text-sm font-medium text-slate-700 truncate max-w-full"> */}
+                                {/* {item.originalQuery || "Search"} */}
+                                {item.title}
+                              {/* </span>
+                            
+                            </div> */}
+                          {/* </SidebarMenuSubButton> */}
+                   
+                        </div>
+                      </SidebarMenuSubItem>
+                    ))}
+                  </SidebarMenuSub>
+                </CollapsibleContent>
+              </SidebarMenuItem>
+            </Collapsible>
+          
+          </>
+          
+          }
+
+
+
+
         </SidebarMenu>
       </SidebarGroup>
     </SidebarContent>

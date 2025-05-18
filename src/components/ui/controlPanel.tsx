@@ -1,22 +1,31 @@
-import React, {useCallback} from 'react';
+import React, {useCallback,useEffect, useState} from 'react';
 
 import { CategoryData } from "@/Model/SchoolModel";
 
 type ControlPanelProps = {
   categories: Array<CategoryData>;
   onCategoryChange: (value: string | null) => void;
+  activeTitle:string
 };
 
 export const ControlPanel = ({
   categories,
-  onCategoryChange
+  onCategoryChange,
+  activeTitle
 }: ControlPanelProps) => {
-  const handleCategoryChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
+
+  //console.log("Active title in CP: " + activeTitle)
+  const handleCategoryChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
       onCategoryChange(e.target.value || null);
     },
-    [onCategoryChange]
+    [onCategoryChange,activeTitle]
   );
+    useEffect(()=>{
+  
+          onCategoryChange(activeTitle)
+
+  },[activeTitle])
+
   return (
     <div className="absolute top-4 right-4 z-50 bg-white p-3 rounded-lg shadow-lg max-w-xs">
     <h3 className="text-md font-semibold mb-1">Location Filter</h3>

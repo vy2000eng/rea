@@ -18,46 +18,50 @@ import { Property} from "@/Model/RealEstateModel";
 import RealEstateDashboard from "@/components/RealEstateDashBoard";
 const SchoolDetails = ({properties, title}: {properties: PropertyInformation[] | CrimeData[] | Property[][],title:string
 }) => {
-	console.log("All properties:", properties);
-	console.log("School Information:", properties);
+	// console.log("All properties:", properties);
+	// console.log("School Information:", properties);
+  console.log("Title in school Details" +title)
+  console.log("All properties:", properties);
+
+
   if (title === "Real Estate"){
     return(
 
-// Just add these style classes to your existing components
-<Tabs defaultValue="for-sale" className="w-full">
-  <TabsList className="grid grid-cols-2 gap-4 mb-8" style={{ backgroundColor: "transparent", padding: 0, boxShadow: "none" }}>
-    <TabsTrigger 
-      value="for-sale" 
-      style={{ 
-        backgroundColor: "white", 
-        color: "#374151", 
-        border: "1px solid #e5e7eb", 
-        borderRadius: "0.375rem",
-        padding: "0.75rem" 
-      }}
-      className="hover:bg-gray-50 data-[state=active]:border-blue-600 data-[state=active]:text-blue-700 font-medium"
-    >
-      For Sale
-    </TabsTrigger>
-    <TabsTrigger 
-      value="for-rent" 
-      style={{ 
-        backgroundColor: "white", 
-        color: "#374151", 
-        border: "1px solid #e5e7eb", 
-        borderRadius: "0.375rem",
-        padding: "0.75rem" 
-      }}
-      className="hover:bg-gray-50 data-[state=active]:border-blue-600 data-[state=active]:text-blue-700 font-medium"
-    >
-      For Rent
-    </TabsTrigger>
-  </TabsList> 
-  <h1 className="text-3xl font-bold mb-6">Real Estate Market Overview</h1>
-  <ScrollArea className="h-dvh">
-    <RealEstateDashboard allRealEstateData={properties as Property[][]}/>
-  </ScrollArea>
-</Tabs>
+        
+        <Tabs defaultValue="for-sale" className="w-full">
+          <TabsList className="grid grid-cols-2 gap-4 mb-8" style={{ backgroundColor: "transparent", padding: 0, boxShadow: "none" }}>
+            <TabsTrigger 
+              value="for-sale" 
+              style={{ 
+                backgroundColor: "white", 
+                color: "#374151", 
+                border: "1px solid #e5e7eb", 
+                borderRadius: "0.375rem",
+                padding: "0.75rem" 
+              }}
+              className="hover:bg-gray-50 data-[state=active]:border-blue-600 data-[state=active]:text-blue-700 font-medium"
+            >
+              For Sale
+            </TabsTrigger>
+            <TabsTrigger 
+              value="for-rent" 
+              style={{ 
+                backgroundColor: "white", 
+                color: "#374151", 
+                border: "1px solid #e5e7eb", 
+                borderRadius: "0.375rem",
+                padding: "0.75rem" 
+              }}
+              className="hover:bg-gray-50 data-[state=active]:border-blue-600 data-[state=active]:text-blue-700 font-medium"
+            >
+              For Rent
+            </TabsTrigger>
+          </TabsList> 
+          <h1 className="text-3xl font-bold mb-6">Real Estate Market Overview</h1>
+          <ScrollArea className="h-dvh">
+            <RealEstateDashboard allRealEstateData={properties as Property[][]}/>
+          </ScrollArea>
+        </Tabs>
 
       
       
@@ -67,32 +71,35 @@ const SchoolDetails = ({properties, title}: {properties: PropertyInformation[] |
   if (title === "Crime"){
     return(
       
+      <div className="container mx-auto p-4 space-y-6 min-w-[600px]">
+
       
          <CrimeChart crimeData={properties as CrimeData[]}/>
+      </div>
     )
   }
 	return (
 
-    <div className="container mx-auto p-4 space-y-6">
+    <div className="container mx-auto p-4 space-y-6 min-w-[600px]">
     {/* Outer Accordion to collapse all locations */}
     <Accordion type="single" collapsible className="w-full border rounded-lg">
       <AccordionItem value="locations">
         <AccordionTrigger className="bg-gray-100 px-4 py-2 rounded-lg">
           <div className="text-lg font-semibold">{title}</div>
         </AccordionTrigger>
-        <AccordionContent>
+        <AccordionContent className="min-w-[600px]">
           <Accordion type="single" collapsible className="w-full">
             {(properties as PropertyInformation[]).map((school, index) => (
               <AccordionItem key={school.id} value={`item-${index}`}>
                 <AccordionTrigger className="bg-white">
                   <div className="flex items-center gap-2 text-left">
                     <SchoolIcon className="w-5 h-5 text-blue-600" />
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <div className="font-semibold">{school.displayName.text}</div>
-                      <div className="text-sm text-slate-500 flex items-center gap-1">
-                        <MapPin className="w-3 h-3" />
-                        {school.formattedAddress}
-                      </div>
+                        <div className="text-sm text-slate-500 flex items-center gap-1">
+                          <MapPin className="w-3 h-3" />
+                          {school.formattedAddress}
+                        </div>
                     </div>
                   </div>
                 </AccordionTrigger>
