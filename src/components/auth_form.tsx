@@ -54,7 +54,7 @@ export function AuthForm({ className, ...props}: React.ComponentPropsWithoutRef<
   
   };
   async function loginWithGoogle(){
-    window.location.href = "https://localhost:7234/api/Account/GoogleLogin?returnUrl=http://localhost:5173/index"
+    window.location.href = import.meta.env.VITE_API_GOOGLE_REDIRECT//"https://localhost:7234/api/Account/GoogleLogin?returnUrl=http://localhost:5173/index"
   }
 
   function changeState(){
