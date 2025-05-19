@@ -95,11 +95,6 @@ export function AppSidebar({isSearchResults,sendActiveTitleToParent }:{isSearchR
     }
   }
 
-  async function DeleteUserAccount(){
-    
-
-  }
-
   useEffect(()=>{
 
     const fetchUserQueries = async () =>{

@@ -1,12 +1,7 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState} from "react";
 import   SchoolDetails from "@/results_components/SchoolDetails";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 import { useMemo } from "react";
 
 import { ArrowLeft } from 'lucide-react';

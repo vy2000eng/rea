@@ -3,7 +3,7 @@ import {
 	Map
 } from "@vis.gl/react-google-maps";
 import { ControlPanel        } from "../components/ui/controlPanel";
-import { useState,useMemo, useEffect    } from "react";
+import { useState,useMemo    } from "react";
 import { PropertyInformation } from "@/Model/SchoolModel";
 import { Review              } from "@/Model/SchoolModel";
 import { PoiMarkers          } from "@/results_components/MapMarkers";
