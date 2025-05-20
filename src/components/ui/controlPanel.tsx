@@ -21,8 +21,12 @@ export const ControlPanel = ({
     [onCategoryChange,activeTitle]
   );
     useEffect(()=>{
-  
+        if(activeTitle!="All locations"){
           onCategoryChange(activeTitle)
+
+
+        }
+  
 
   },[activeTitle])
 

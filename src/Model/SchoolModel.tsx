@@ -59,7 +59,7 @@ export function getCategories(properties?: PropertyInformation []){
     return Object.entries(countByCategory).map(([key, value]) => {
 		
 
-        const label = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        const label = key//key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
         return {
             key: key,
             label,

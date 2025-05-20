@@ -168,51 +168,52 @@ export function SearchResults({isSample, location, id,activeTitle}: { isSample: 
     );
   }
   return (
-    <>
-    <div className=" relative bg-white">
-    {/* Left-aligned arrow button */}
-      <div className="flex justify-start p-4">
+    <div className="flex flex-col w-full overflow-hidden">
+    <div className="sticky top-0 z-10 bg-white w-full">
+      {/* Mobile-friendly back button */}
+      <div className="flex justify-start p-3">
         <button
-          onClick={() => navigate('/index')} // Replace with your actual route
-          className="flex items-center p-2 rounded hover:bg-gray-100 transition bg-slate-100"
+          onClick={() => navigate('/index')}
+          className="flex items-center p-2 rounded-full shadow-sm hover:bg-gray-100 transition bg-slate-100"
           aria-label="Back to search"
-
         >
-          <ArrowLeft size={24} />
+          <ArrowLeft size={20} />
         </button>
       </div>
-
-    {/* ...rest of your content */}
-  </div>
-  {/* Map Section - takes full height minus any other elements */}
-  <div className="flex flex-col h-full">
-  {/* Map container */}
-  <div className="h-3/5 w-full">
-    <GoogleMap 
-      schoolProperties={schoolProperties}
-      hospitalProperties={hospitalProperties}
-      corporateOfficeProperties={corporateOfficeProperties}
-      bankProperties={bankProperties}
-      parkProperties={parkProperties}
-      postOfficeProperties={postOfficeProperties}
-      churchesProperties={churchesProperties}
-      groceryStoreProperties={groceryStoreProperties}
-      gymStoreProperties={gymStoreProperties}
-      restarauntProperties={restarauntProperties}
-      policeDepartments={policeDepartmentProperties}
-      forSaleProperties={forSaleProperties}
-      forRentProperties={forRentProperties}
-      activeTitle={activeTitle}
-    />
-  </div>
-  
-  {/* Fixed width container for SchoolDetails */}
-  <div className="h-2/5 overflow-auto">
-    <div className="w-full min-w-[600px] mx-auto">
-      <SchoolDetails key={activeTitle} properties={activeProperties} title={activeTitle} />
+    </div>
+    
+    {/* Responsive container with fixed width to prevent overflow */}
+    <div className="flex flex-col w-full max-w-full overflow-hidden">
+      {/* Map container */}
+      <div className="w-full h-[40vh] sm:h-[45vh]">
+        <GoogleMap
+          schoolProperties={schoolProperties}
+          hospitalProperties={hospitalProperties}
+          corporateOfficeProperties={corporateOfficeProperties}
+          bankProperties={bankProperties}
+          parkProperties={parkProperties}
+          postOfficeProperties={postOfficeProperties}
+          churchesProperties={churchesProperties}
+          groceryStoreProperties={groceryStoreProperties}
+          gymStoreProperties={gymStoreProperties}
+          restarauntProperties={restarauntProperties}
+          policeDepartments={policeDepartmentProperties}
+          forSaleProperties={forSaleProperties}
+          forRentProperties={forRentProperties}
+          activeTitle={activeTitle}
+        />
+      </div>
+      
+      {/* Details section - explicitly constrain width */}
+      <div className="w-full overflow-y-auto pb-16">
+        <div className="w-full max-w-full px-2 sm:px-4">
+          <SchoolDetails key={activeTitle} properties={activeProperties} title={activeTitle} />
+        </div>
+      </div>
     </div>
   </div>
-</div>
+  );
+}
   {/* Uncomment if needed */}
 
 
@@ -254,6 +255,4 @@ export function SearchResults({isSample, location, id,activeTitle}: { isSample: 
               );
             })}
       </div> */}
-    </>
-  );
-}
+ 
