@@ -13,6 +13,7 @@ import PasswordReset from "./pages/ResetPassword"
 import { SendPasswordReset } from "./pages/SendPasswordReset"
 import IndexSideBar from "./components/SideBars/IndexSideBar"
 import SearchResultsSideBar from "./components/SideBars/SearchResultsSideBarComponent"
+import { Analytics } from "@vercel/analytics/next"
 
 function App() {
 
@@ -39,6 +40,9 @@ function App() {
           </Routes>
       </BrowserRouter>
       <Toaster/>
+      <Analytics />
+
+      
 
     </AuthProvider>
    
