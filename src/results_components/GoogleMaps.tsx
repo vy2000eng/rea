@@ -146,36 +146,63 @@ export function GoogleMap(
 
 
         return (
-            <div className="w-full h-full">
+            <div className="w-full h-full relative">
                 <APIProvider
                     apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
                     onLoad={() => console.log("Maps API has loaded.")}
-                >  
-                 
+                >
                     <Map
-                        style={{ width: "100%", height: "100%" }}
-
-                        defaultCenter={{
-                            lat: schoolProperties[0].location.latitude,
-                            lng: schoolProperties[0].location.longitude,
-                        }}
-                        defaultZoom={8}
-                        gestureHandling={"greedy"}
-                        mapId={"cbf7dada0ba33cac"}
-                        disableDefaultUI
+                    style={{ width: "100%", height: "100%" }}
+                    defaultCenter={{
+                        lat: schoolProperties[0].location.latitude,
+                        lng: schoolProperties[0].location.longitude,
+                    }}
+                    defaultZoom={8}
+                    gestureHandling={"greedy"}
+                    mapId={"cbf7dada0ba33cac"}
+                    disableDefaultUI
                     >
-                        <PoiMarkers pois={locations} />
-                    </Map>
-
-                    <ControlPanel 
-                        categories       = {categories}
-                        onCategoryChange = {setSelectedCategory}
-                        activeTitle      = {activeTitle}
+                    <PoiMarkers pois={locations} />
                     
+                    {/* Control Panel as a component - better approach */}
+                    <ControlPanel
+                        categories={categories}
+                        onCategoryChange={setSelectedCategory}
+                        activeTitle={activeTitle}
                     />
-                 
+                    </Map>
                 </APIProvider>
             </div>
+            // <div className="w-full h-full">
+            //     <APIProvider
+            //         apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
+            //         onLoad={() => console.log("Maps API has loaded.")}
+            //     >  
+                 
+            //         <Map
+            //             style={{ width: "100%", height: "100%" }}
+
+            //             defaultCenter={{
+            //                 lat: schoolProperties[0].location.latitude,
+            //                 lng: schoolProperties[0].location.longitude,
+            //             }}
+            //             defaultZoom={8}
+            //             gestureHandling={"greedy"}
+            //             mapId={"cbf7dada0ba33cac"}
+            //             disableDefaultUI
+            //         >
+            //             <PoiMarkers pois={locations} />
+            //         </Map>
+
+            //         <ControlPanel 
+            //             categories       = {categories}
+            //             onCategoryChange = {setSelectedCategory}
+            //             activeTitle      = {activeTitle}
+                    
+            //         />
+                 
+            //     </APIProvider>
+            // </div>
         );
 }
 Array

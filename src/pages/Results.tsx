@@ -199,7 +199,6 @@ export function SearchResults({isSample, location, id,activeTitle,setActiveTitle
   }
   return (
     <>
-    {/* Simple header with back button */}
     <div className="p-3 bg-white border-b">
       <button
         onClick={() => navigate('/index')}
@@ -212,7 +211,7 @@ export function SearchResults({isSample, location, id,activeTitle,setActiveTitle
     {/* Map - fixed height with inline styles to guarantee it never changes */}
     <div className="items-center">
       {/* <div style={{ height: "350px" ,width:"500px" }}> */}
-      <div className="lg:w-[600px] h-[450px] md:w-[350px] h-[300px] sm:w-[300px] h-[250]">
+      <div className="lg:w-[600px] h-[450px] md:w-[350px] h-[300px] w-min-[200px] h-min-[250]">
         <GoogleMap
           schoolProperties={schoolProperties}
           hospitalProperties={hospitalProperties}
@@ -233,7 +232,7 @@ export function SearchResults({isSample, location, id,activeTitle,setActiveTitle
       </div>
     
       {/* Content area - scrollable */}
-      <div className="lg:w-[600px] md:w-[350px] sm:w-[300px] ">
+      <div className="lg:w-[600px] h-[450px] md:w-[350px] h-[300px] w-min-[200px] h-min-[250]">
         <SchoolDetails 
           key={activeTitle} 
           properties={activeProperties} 

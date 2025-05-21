@@ -92,7 +92,7 @@ const SchoolDetails = ({properties, title}: {properties: PropertyInformation[] |
     {/* Outer Accordion open by default */}
     <Accordion type="single" defaultValue="locations" collapsible className="w-full border rounded-lg max-w-full">
       <AccordionItem value="locations" className="max-w-full">
-        <AccordionTrigger className="bg-gray-100 px-4 py-2 rounded-t-lg">
+        <AccordionTrigger className="bg-gray-100  py-2 rounded-t-lg">
           <div className="text-lg font-semibold">{title}</div>
         </AccordionTrigger>
         <AccordionContent className="max-w-full overflow-hidden">
