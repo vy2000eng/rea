@@ -56,7 +56,7 @@ export const ControlPanel = ({
           onChange={handleCategoryChange}
           className="w-full px-2 py-1 text-sm bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
         >
-          <option value="">All locations</option>
+          <option value="">{selectedCategory}</option>
           {categories.map(category => (
             <option key={category.key} value={category.key}>
               {category.label} ({category.count})
