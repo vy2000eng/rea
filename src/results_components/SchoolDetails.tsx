@@ -85,7 +85,8 @@ const SchoolDetails = ({properties, title}: {properties: PropertyInformation[] |
       </div>
     )
   }
-	return (
+  if(title !== "All locations"){
+    	return (
 
     <div className="w-full p-2 sm:p-4">
     {/* Outer Accordion open by default */}
@@ -153,6 +154,9 @@ const SchoolDetails = ({properties, title}: {properties: PropertyInformation[] |
     </Accordion>
   </div>
 	);
+    
+  }
+
 };
 
 export default SchoolDetails;

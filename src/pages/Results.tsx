@@ -22,7 +22,7 @@ import { CrimeData} from "@/Model/CrimeModel";
 import { Property } from "@/Model/RealEstateModel";
 import { useAuth } from "@/context/AuthContext";
 
-export function SearchResults({isSample, location, id,activeTitle}: { isSample: boolean, location:string|undefined, id:string|undefined, activeTitle:string}) {
+export function SearchResults({isSample, location, id,activeTitle,setActiveTitle}: { isSample: boolean, location:string|undefined, id:string|undefined, activeTitle:string,setActiveTitle:(title:string)=>void}) {
  // console.log("SearchResult "+ activeTitle)  
 
   const navigate = useNavigate()
@@ -33,6 +33,7 @@ export function SearchResults({isSample, location, id,activeTitle}: { isSample: 
     location: location,
     id      : id 
   };
+
 
 
   const [schoolProperties         , setSchoolProperties         ] = useState<PropertyInformation[]>([]);
@@ -46,7 +47,7 @@ export function SearchResults({isSample, location, id,activeTitle}: { isSample: 
   const [gymStoreProperties       , setGymProperties            ] = useState<PropertyInformation[]>([]);
   const [restarauntProperties     , setRestarauntProperties     ] = useState<PropertyInformation[]>([]);
   //const [activeProperties         , setActiveProperties         ] = useState<PropertyInformation[] | CrimeData[]|Property[][]>([]);
- // const [activeTitle              , setActiveTitle              ] = useState<string>("School Details" );
+  const [activeTitleL              , setActiveLTitle              ] = useState<string>(activeTitle );
   const [loading                  , setLoading                  ] = useState(true                     );
   const [crimeData                , setCrimeData                ] = useState<CrimeData[]>([])
   const [forSaleListings          , setForSaleListings          ] = useState<Property[]> ();
@@ -96,7 +97,7 @@ export function SearchResults({isSample, location, id,activeTitle}: { isSample: 
             setGymProperties                     (data["gymInformation"]                                                        );
             setRestarauntProperties              (data["restaurantInformation"]                                                 );
             setCrimeData                         (data["crimeInformation"]);
-           // setActiveProperties                  (data["schoolInformation"] )
+            //setActiveProperties                  (data["schoolInformation"] )
             setForSaleListings                   (data["forSaleListings"].props);
             setForRentLstings                    (data["rentalListings"].props);
             //setActiveTitle                       ("Universities")
@@ -112,7 +113,7 @@ export function SearchResults({isSample, location, id,activeTitle}: { isSample: 
     
     //sendDataToParent(propertyCards)
 
-  }, [location]);
+  }, [location,endpointToUse.location, endpointToUse.id]);
 
   let policeDepartmentProperties:PropertyInformation[] = parsePoliceDepartmentData(crimeData)
  let forRentProperties          :PropertyInformation[] = []
@@ -129,36 +130,65 @@ export function SearchResults({isSample, location, id,activeTitle}: { isSample: 
  // console.log(allRealEstateData)
 
   const propertyCards = [
-    {title: "University", count: schoolProperties         .length, type: "schools"        ,data: schoolProperties          },
-    {title: "Hospital"         , count: hospitalProperties       .length, type: "hospitals"      ,data: hospitalProperties         },
-    {title: "Corporate Offices" , count: corporateOfficeProperties.length, type: "offices"        ,data: corporateOfficeProperties  },
-    {title: "Bank"             , count: bankProperties           .length, type: "banks"          ,data: bankProperties             },
-    {title: "Parks"             , count: parkProperties           .length, type: "parks"          ,data: parkProperties             },
-    {title: "Post Offices"      , count: postOfficeProperties     .length, type: "post offices"   ,data: postOfficeProperties       },
-    {title: "Churches"          , count: churchesProperties       .length, type: "churches"       ,data: churchesProperties         },
-    {title: "GroceryStore"      , count: groceryStoreProperties   .length, type: "groceries"      ,data: groceryStoreProperties     },
-    {title: "Gyms"              , count: gymStoreProperties       .length, type: "gyms"           ,data: gymStoreProperties         },
-    {title: "Restaurants"       , count: restarauntProperties     .length, type: "restaurants"    ,data: restarauntProperties       },
+    {title: "university",        count: schoolProperties         .length, type: "schools"        ,data: schoolProperties          },
+    {title: "hospital"         , count: hospitalProperties       .length, type: "hospitals"      ,data: hospitalProperties         },
+    {title: "corporate_office" , count: corporateOfficeProperties.length, type: "offices"        ,data: corporateOfficeProperties  },
+    {title: "bank"             , count: bankProperties           .length, type: "banks"          ,data: bankProperties             },
+    {title: "park"             , count: parkProperties           .length, type: "parks"          ,data: parkProperties             },
+    {title: "post_office"      , count: postOfficeProperties     .length, type: "post offices"   ,data: postOfficeProperties       },
+    {title: "church"          , count: churchesProperties       .length, type: "churches"       ,data: churchesProperties         },
+    {title: "grocery_store"      , count: groceryStoreProperties   .length, type: "groceries"      ,data: groceryStoreProperties     },
+    {title: "gym"              , count: gymStoreProperties       .length, type: "gyms"           ,data: gymStoreProperties         },
+    {title: "restaruant"       , count: restarauntProperties     .length, type: "restaurants"    ,data: restarauntProperties       },
     {title: "Crime"             , count: crimeData                .length, type: "Crime Agencies" ,data: crimeData                  },
     {title: "Real Estate"       , count: 0                               , type: "realEstate"     ,data: allRealEstateData          }
 
 
   ];
 
-  // useEffect(()=>{
-  //   propertyCards.forEach(x =>{
-  //     if(x.title === activeTitle){
-  //       setActiveProperties(x.data);
-        
-  //     }
+  useEffect(()=>{
+     // confirm(activeTitleL + "active title in results")
+      activeTitle = activeTitleL
 
-  //   })
-  //  // sendDataToParent(propertyCards)
-  // },[activeTitle])
-  const activeProperties = useMemo(() => {
+      if(activeTitleL === "for_sale_listings" || activeTitleL ==="for_rent_listings"){
+        setActiveLTitle("Real Estate")
+      }else{
+        setActiveTitle(activeTitleL)
+
+
+      }
+      
+
+
+
+    //confirm("call from Maps")
+    //se
+
+    // propertyCards.forEach(x =>{
+    //   if(x.title === activeTitle){
+    //     //setActiveProperties(x.data);
+        
+    //   }
+
+    // })
+   // sendDataToParent(propertyCards)
+  },[activeTitleL])
+
+  // function setActiveTitleCallBack(title:string){
+  //   console.log(`triggered from maps - old title:${activeTitle} newTitle:${title}`)
+  //   activeTitle = title
+
+  //   //  activeProperties = useMemo(() => {
+  //   //   const matchingCard = propertyCards.find(x => x.title === activeTitle);
+  //   //   return matchingCard ? matchingCard.data : schoolProperties;
+  //   // },[activeTitle])
+
+  // }
+
+  let activeProperties = useMemo(() => {
     const matchingCard = propertyCards.find(x => x.title === activeTitle);
     return matchingCard ? matchingCard.data : schoolProperties;
-  }, [ activeTitle]);
+  }, [ activeTitle,activeTitleL]);
 
   if (loading) {
     return (
@@ -168,24 +198,21 @@ export function SearchResults({isSample, location, id,activeTitle}: { isSample: 
     );
   }
   return (
-    <div className="flex flex-col w-full overflow-hidden">
-    <div className="sticky top-0 z-10 bg-white w-full">
-      {/* Mobile-friendly back button */}
-      <div className="flex justify-start p-3">
-        <button
-          onClick={() => navigate('/index')}
-          className="flex items-center p-2 rounded-full shadow-sm hover:bg-gray-100 transition bg-slate-100"
-          aria-label="Back to search"
-        >
-          <ArrowLeft size={20} />
-        </button>
-      </div>
+    <>
+    {/* Simple header with back button */}
+    <div className="p-3 bg-white border-b">
+      <button
+        onClick={() => navigate('/index')}
+        className="flex items-center p-2 rounded-full bg-slate-100 hover:bg-gray-100"
+      >
+        <ArrowLeft size={20} />
+      </button>
     </div>
     
-    {/* Responsive container with fixed width to prevent overflow */}
-    <div className="flex flex-col w-full max-w-full overflow-hidden">
-      {/* Map container */}
-      <div className="w-full h-[40vh] sm:h-[45vh]">
+    {/* Map - fixed height with inline styles to guarantee it never changes */}
+    <div className="items-center">
+      {/* <div style={{ height: "350px" ,width:"500px" }}> */}
+      <div className="lg:w-[600px] h-[450px] md:w-[350px] h-[300px]">
         <GoogleMap
           schoolProperties={schoolProperties}
           hospitalProperties={hospitalProperties}
@@ -201,17 +228,68 @@ export function SearchResults({isSample, location, id,activeTitle}: { isSample: 
           forSaleProperties={forSaleProperties}
           forRentProperties={forRentProperties}
           activeTitle={activeTitle}
+          onActiveTitleChange={setActiveLTitle}
         />
       </div>
-      
-      {/* Details section - explicitly constrain width */}
-      <div className="w-full overflow-y-auto pb-16">
-        <div className="w-full max-w-full px-2 sm:px-4">
-          <SchoolDetails key={activeTitle} properties={activeProperties} title={activeTitle} />
-        </div>
+    
+      {/* Content area - scrollable */}
+      <div>
+        <SchoolDetails 
+          key={activeTitle} 
+          properties={activeProperties} 
+          title={activeTitle} 
+        />
       </div>
+
     </div>
-  </div>
+ 
+  </>
+  //   <div className="flex flex-col w-full overflow-hidden">
+  //   <div className="sticky top-0 z-10 bg-white w-full">
+  //     {/* Mobile-friendly back button */}
+  //     <div className="flex justify-start p-3">
+  //       <button
+  //         onClick={() => navigate('/index')}
+  //         className="flex items-center p-2 rounded-full shadow-sm hover:bg-gray-100 transition bg-slate-100"
+  //         aria-label="Back to search"
+  //       >
+  //         <ArrowLeft size={20} />
+  //       </button>
+  //     </div>
+  //   </div>
+    
+  //   {/* Responsive container with fixed width to prevent overflow */}
+  //   <div className="flex flex-col w-full max-w-full overflow-hidden">
+  //     {/* Map container */}
+  //     <div className="w-full h-[40vh] sm:h-[45vh]">
+  //       <GoogleMap
+  //         schoolProperties={schoolProperties}
+  //         hospitalProperties={hospitalProperties}
+  //         corporateOfficeProperties={corporateOfficeProperties}
+  //         bankProperties={bankProperties}
+  //         parkProperties={parkProperties}
+  //         postOfficeProperties={postOfficeProperties}
+  //         churchesProperties={churchesProperties}
+  //         groceryStoreProperties={groceryStoreProperties}
+  //         gymStoreProperties={gymStoreProperties}
+  //         restarauntProperties={restarauntProperties}
+  //         policeDepartments={policeDepartmentProperties}
+  //         forSaleProperties={forSaleProperties}
+  //         forRentProperties={forRentProperties}
+  //         activeTitle={activeTitle}
+  //         onActiveTitleChange={setActiveTitleCallBack}
+
+  //       />
+  //     </div>
+      
+  //     {/* Details section - explicitly constrain width */}
+  //     <div className="w-full overflow-y-auto pb-16">
+  //       <div className="w-full max-w-full px-2 sm:px-4">
+  //         <SchoolDetails key={activeTitle} properties={activeProperties} title={activeTitle} />
+  //       </div>
+  //     </div>
+  //   </div>
+  // </div>
   );
 }
   {/* Uncomment if needed */}

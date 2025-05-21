@@ -8,6 +8,7 @@ import { PropertyInformation } from "@/Model/SchoolModel";
 import { Review              } from "@/Model/SchoolModel";
 import { PoiMarkers          } from "@/results_components/MapMarkers";
 import { getCategories       } from "@/Model/SchoolModel";
+import { useEffect } from "react";
 
 export type Poi = {
 
@@ -34,7 +35,8 @@ export function GoogleMap(
         policeDepartments        ,
         forSaleProperties        ,
         forRentProperties        ,
-        activeTitle
+        activeTitle              ,
+        onActiveTitleChange
 
     }: 
     {
@@ -52,6 +54,7 @@ export function GoogleMap(
      forSaleProperties        : PropertyInformation[],
      forRentProperties        : PropertyInformation[],
      activeTitle:string
+     onActiveTitleChange:(title:string) => void
 
 
     }) 
@@ -65,6 +68,7 @@ export function GoogleMap(
             reviews.forEach((r) => (totalStars += r.rating));
             return totalStars / reviews.length;
         };
+
 
         const allProperties = schoolProperties
                                 .concat(hospitalProperties)
@@ -82,6 +86,21 @@ export function GoogleMap(
                                 .filter(property => property !== null && property !== undefined);;
         const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
        console.log("The current Active Title is:" + activeTitle)
+        
+        useEffect(()=>{
+            if(activeTitle!="All locations"){
+                //confirm("ok?")
+                onActiveTitleChange(activeTitle)
+    
+    
+            }
+        
+    
+        },[activeTitle])
+
+
+
+
     //    useEffect(()=>{
         
     //             setSelectedCategory(activeTitle)
@@ -93,6 +112,8 @@ export function GoogleMap(
         
 
         const filteredProperties = useMemo(() => {
+            onActiveTitleChange(selectedCategory|| "")
+            //confirm(selectedCategory||"")
             //setSelectedCategory(activeTitle)
             console.log(selectedCategory)
           if (!allProperties) return null;
@@ -120,7 +141,7 @@ export function GoogleMap(
                   averageRating: getAverageRating(locationInformation.reviews),
               }))
               : [];
-          }, [filteredProperties]);
+          }, [filteredProperties,activeTitle]);
 
 
 
