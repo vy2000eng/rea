@@ -40,12 +40,12 @@ export default function SearchResultsSideBar({isSample}: { isSample: boolean }) 
 //                                                          ----> Contolpanel
 //
   return (
-    <SidebarProvider>
+    <SidebarProvider className="w-fit-content bg-white ">
   <AppSidebar isSearchResults={true} sendActiveTitleToParent={handleActiveTitleFromChild} />
-  <SidebarTrigger className="fixed top-4 left-4 z-50 bg-slate-100 md:hidden rounded-full p-2 shadow-md" />
-  <div className="w-full">
-    <SidebarInset className="bg-white">
-      <div className=" flex flex-col ">
+  <SidebarTrigger className="fixed top-4 left-4 z-50 bg-slate-100 md:hidden rounded-full p-2 shadow-md overflow-auto " />
+  <div className="w-full bg-white">
+    <SidebarInset className="bg-white w-full">
+      <div className=" flex flex-col  ">
         <SearchResults isSample={isSample} location={location} id={id} activeTitle={activeChildTitle} setActiveTitle={handleActiveTitleFromChild}  />
       </div>
     </SidebarInset>
