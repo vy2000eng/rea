@@ -212,7 +212,7 @@ export function SearchResults({isSample, location, id,activeTitle,setActiveTitle
     {/* Map - fixed height with inline styles to guarantee it never changes */}
     <div className="w-full place-items-center ">
       {/* <div style={{ height: "350px" ,width:"500px" }}> */}
-      <div className="w-full lg:w-[600px] h-[450px] md:w-[350px] h-[300px] sm:w-[250px] h-[150] ">
+      <div className="w-full h-2/3 ">
         <GoogleMap
           schoolProperties={schoolProperties}
           hospitalProperties={hospitalProperties}

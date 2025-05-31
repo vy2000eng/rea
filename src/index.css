@@ -28,7 +28,7 @@ a:hover {
 body {
   margin: 10;
   display: flex;
-  place-items: center;
+  justify-content: center;
   min-width: 100%; /* Changed from 550px to 100% */
   min-height: 100vh;
   padding: 1rem; /* Added padding for mobile screens */
