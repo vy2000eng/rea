@@ -18,16 +18,19 @@ export default function IndexSideBar() {
 
 
   return (
-    <SidebarProvider>
+    <SidebarProvider className="bg-white overflow-hidden">
 
-
+    <div className="flex place-items-cente h-screen  w-full  bg-white">
       <AppSidebar isSearchResults={false}  />
       <SidebarTrigger className="absolute top-4 left-4 z-50 bg-slate-200" />
-      <SidebarInset>
+      <SidebarInset className="bg-white">
       
           <Index />
           
       </SidebarInset>
+
+    </div>
+    
     </SidebarProvider>
   )
 }
