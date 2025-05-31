@@ -85,7 +85,7 @@ const SchoolDetails = ({properties, title}: {properties: PropertyInformation[] |
       </div>
     )
   }
-  if(title !== "All locations"){
+  if(title !== "All locations" || ""){
     	return (
 
     <div className="w-full p-2 sm:p-4">
@@ -155,6 +155,11 @@ const SchoolDetails = ({properties, title}: {properties: PropertyInformation[] |
   </div>
 	);
     
+  }else{
+    return(
+      <>
+      </>
+    )
   }
 
 };

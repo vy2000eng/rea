@@ -158,16 +158,16 @@ export function AppSidebar({isSearchResults,sendActiveTitleToParent }:{isSearchR
     },
   ]
   const propertyCards = [
-      {title: "university"},
-      {title: "hospital"         },
-      {title: "corporate_office" },
-      {title: "bank"             },
-      {title: "park"             },
-      {title: "post_office"      },
-      {title: "church"          },
-      {title: "grocery_store"      },
-      {title: "gym"              },
-      {title: "restaurant"       },
+      {title: "university"        },
+      {title: "hospital"          },
+      {title: "corporate_office"  },
+      {title: "bank"              },
+      {title: "park"              },
+      {title: "post_office"       },
+      {title: "church"            },
+      {title: "grocery_store"     },
+      {title: "gym"               },
+      {title: "restaurant"        },
       {title: "Crime"             },
       {title: "Real Estate"       }
   
