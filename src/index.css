@@ -29,8 +29,9 @@ body {
   margin: 0;
   display: flex;
   place-items: center;
-  min-width: 550px;
+  min-width: 100%; /* Changed from 550px to 100% */
   min-height: 100vh;
+  padding: 1rem; /* Added padding for mobile screens */
 }
 
 h1 {
